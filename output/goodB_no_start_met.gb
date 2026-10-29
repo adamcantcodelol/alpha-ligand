@@ -1,0 +1,31 @@
+LOCUS       goodB_no_start_m         195 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  Codon-optimized insert for E. coli expression.
+ACCESSION   goodB_no_start_m
+VERSION     goodB_no_start_m
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    1..6
+                     /label="NdeI site"
+                     /note="CATATG, ATG = start codon"
+     CDS             4..189
+                     /label="goodB_no_start_met-LEHHHHHH"
+                     /translation="MSLKDAQTNSSSNLGEKILSAIEAHQKSLDEFAKRLNDLSKTYGE
+                     QIKQLTEALEHHHHHH"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="goodB_no_start_met with C-terminal His6 tag"
+     misc_feature    163..186
+                     /label="LEHHHHHH (His6) tag"
+     misc_feature    187..189
+                     /label="TAA stop codon"
+     misc_feature    190..195
+                     /label="XhoI site"
+ORIGIN
+        1 catatgagcc tgaaagatgc gcagaccaat agcagcagca acctgggcga aaagatcctg
+       61 agcgcgattg aagcgcatca gaaaagcctg gatgaatttg cgaaacgcct gaacgatctg
+      121 agcaaaacct atggcgaaca gatcaagcag ctgaccgaag cgctggaaca tcatcatcat
+      181 catcattaac tcgag
+//

@@ -1,0 +1,29 @@
+LOCUS       goodA_small_bind         132 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  Codon-optimized insert for E. coli expression.
+ACCESSION   goodA_small_bind
+VERSION     goodA_small_bind
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    1..6
+                     /label="NdeI site"
+                     /note="CATATG, ATG = start codon"
+     CDS             4..126
+                     /label="goodA_small_binder-LEHHHHHH"
+                     /translation="MKQLEDKVEELLSKNYHLENEVARLKKLVGERLEHHHHHH"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="goodA_small_binder with C-terminal His6 tag"
+     misc_feature    100..123
+                     /label="LEHHHHHH (His6) tag"
+     misc_feature    124..126
+                     /label="TAA stop codon"
+     misc_feature    127..132
+                     /label="XhoI site"
+ORIGIN
+        1 catatgaaac agctggaaga caaggtggaa gaactgctga gcaaaaacta ccatctggaa
+       61 aacgaagtgg cgcgcctgaa aaaactggtg ggcgaacgcc tggaacatca tcatcatcat
+      121 cattaactcg ag
+//

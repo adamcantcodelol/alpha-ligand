@@ -1,0 +1,76 @@
+========================================================================
+POCKET PROFILE AND COMPLEMENTARY LIGAND BLUEPRINT
+Structure : 3ERT
+Cutoff    : 6.0 A around active-site side chains
+========================================================================
+
+1. ACTIVE SITE RESIDUES YOU NAMED
+   DA:351 (ASP)
+   WA:383 (TRP)
+   HA:524 (HIS)
+
+2. POCKET SHELL (33 residues within 6.0 A)
+   A:343, A:347, A:348, A:349, A:350, A:351, A:352, A:353, A:354, A:357, A:379, A:380, A:381, A:382, A:383, A:384, A:385, A:386, A:387, A:419, A:420, A:421, A:520, A:521, A:522, A:523, A:524, A:525, A:526, A:527, A:528, A:536, A:540
+
+3. CHEMICAL CHARACTER OF THE POCKET
+   Composition          : L=8, M=5, E=5, A=2, G=2, T=1, N=1, D=1, R=1, C=1, W=1, I=1, K=1, H=1, Y=1, S=1
+   Hydrophobic          : 18  (55%)
+   Aromatic             : 3  (9%)
+   Positive (K/R)       : 2  (6%)
+   Negative (D/E)       : 6  (18%)
+   Polar neutral        : 6  (18%)
+   Mean KD hydropathy   : +0.30  (greasy pocket)
+   Net formal charge    : -4 at pH 7
+   Side-chain H-bond    : 11 donors, 17 acceptors
+
+4. POCKET SIZE AND SHAPE
+   Centroid (x,y,z)     : [31.88, -0.03, 21.77]
+   Bounding box (A)     : [25.78, 24.47, 26.74]
+   Max atom span (A)    : 29.29
+   Pocket atoms counted : 266
+   Total pocket SASA    : 929.5 A^2 (Shrake-Rupley)
+
+5. WORKING BACKWARDS: COMPLEMENTARY LIGAND FEATURES (ranked)
+   POCKET RES   LIGAND FEATURE         SUGGESTED CHEMISTRY                APPROX XYZ
+  *DA:351       cationic               amine / amidine / guanidine        [30.89, -7.85, 19.95]
+  *WA:383       aromatic               aryl ring or cation for cation-pi  [31.74, 1.57, 18.43]
+  *HA:524       anionic_or_aromatic    carboxylate, or aryl ring for stac [40.14, -0.65, 27.91]
+   RA:352       anionic                carboxylate / phosphate / sulfonat [24.21, -11.26, 25.45]
+   EA:353       cationic               amine / amidine / guanidine        [23.49, -3.29, 25.06]
+   EA:380       cationic               amine / amidine / guanidine        [33.32, 3.39, 10.91]
+   EA:385       cationic               amine / amidine / guanidine        [27.82, 10.58, 20.64]
+   EA:419       cationic               amine / amidine / guanidine        [40.38, -4.97, 29.35]
+   KA:520       anionic                carboxylate / phosphate            [39.86, 11.48, 29.25]
+   EA:523       cationic               amine / amidine / guanidine        [40.53, 9.58, 24.99]
+   YA:526       aromatic_and_hbond     aryl ring plus an H-bond acceptor  [44.43, 3.27, 15.96]
+   NA:348       hbond_mixed            H-bond acceptor facing the NH2, do [28.23, -12.51, 24.46]
+   TA:347       hbond_acceptor         carbonyl / ether oxygen            [34.49, -6.59, 24.98]
+   SA:527       hbond_acceptor         carbonyl / ester / ether / N of he [43.75, 0.79, 25.26]
+   MA:343       hydrophobic            alkyl / thioether-friendly greasy  [36.03, -4.25, 27.44]
+   LA:349       hydrophobic            alkyl group                        [24.14, -7.23, 26.86]
+   LA:354       hydrophobic            alkyl group                        [26.24, -1.77, 16.72]
+   MA:357       hydrophobic            alkyl / thioether-friendly greasy  [23.73, 1.29, 17.86]
+   LA:379       hydrophobic            alkyl group                        [23.25, 1.94, 11.96]
+   CA:381       hbond_acceptor_or_covalent H-bond acceptor; or a mild electro [30.7, 9.19, 12.73]
+   ... 13 more features in the JSON file.
+   (* = residue you named as active site; these are weighted highest.)
+
+6. SUGGESTED LIGAND PROPERTY WINDOWS
+   Molecular weight (Da): 260.0 - 480.0
+   cLogP                : 0.3 - 3.3
+   Rotatable bonds      : <= 6
+   H-bond donors        : 0 - 5
+   H-bond acceptors     : 1 - 5
+   Net charge           : +2
+   Basis                : Derived from pocket span 29.3 A, mean Kyte-Doolittle 0.30 and net pocket charge -4. Rules of thumb only.
+
+7. HOW TO READ THIS
+   Each line in section 5 says: 'the pocket offers X here, so your
+   ligand should present the opposite of X at roughly these
+   coordinates'. Build or search for a molecule that places those
+   groups near those points, then dock and test it.
+
+NOTE: This is a HYPOTHESIS-GENERATING pharmacophore derived purely from
+the geometry and chemistry of the pocket residues. Nothing here has been
+docked, scored, simulated or experimentally validated. Treat it as a
+starting blueprint for designing or searching for a repressor ligand.
