@@ -333,13 +333,31 @@ AutoDock Vina on it, clones this repo, and runs the three scripts.
 
 **Link:** <https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb>
 
-You click the play button on each cell, top to bottom. The default example is `3ERT`
-with active-site residues `A:351,A:383,A:524`, and it docks 4-hydroxytamoxifen (the
-drug that really binds that pocket) as a control. The last cell downloads the result
-files - reports, the generated molecules and the docked poses - to your computer.
+You click the play button on each cell, top to bottom. **No code editing is
+needed**: Step 2 is a Colab form with real text boxes and sliders for
+
+* `PDB_CODE` (or tick `UPLOAD_MY_OWN_FILE` to upload your own `.pdb`/`.cif`),
+* `ACTIVE_SITE_RESIDUES` as `chain:number`, comma separated,
+* `CUTOFF_ANGSTROMS`, `NUMBER_OF_MOLECULES`, `CONFORMERS_PER_MOLECULE`,
+* `CONTROL_LIGAND` (`auto` / `none` / `custom` + a SMILES box).
+
+The boxes start on the `3ERT` example (`A:351,A:383,A:524`); overwrite them for
+your own protein. Step 2b inspects the structure and suggests active-site
+residues from whatever is bound in the crystal, printed in the exact
+`chain:number` format to copy and paste. Step 2c echoes back the protein,
+residues, cutoff and control that are about to be used, and stops with a plain
+message if the residues box is empty or malformed. The last cell downloads the
+result files - reports, the generated molecules and the docked poses - to your
+computer.
 
 Things to know:
 
+* The control is tied to the protein: `auto` uses 4-hydroxytamoxifen **only**
+  when the code really is `3ERT`, and no control at all otherwise, since a
+  control from a different protein is meaningless. Use `custom` to supply one.
+* Step 2b's suggestions come from the crystal contents, not from biology. If the
+  structure is apo (nothing bound) it says so and points you at the literature or
+  the RCSB entry page.
 * The install cell takes a few minutes, and must be re-run if Colab disconnects your
   session.
 * A free Colab machine is reclaimed when idle. Nothing is lost except time; re-run
