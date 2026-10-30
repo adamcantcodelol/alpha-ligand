@@ -1,0 +1,91 @@
+/* Alpha-Ligand - plain CSS, no frameworks. */
+:root{
+  --bg:#0f1115; --card:#171a21; --line:#272c37; --ink:#e7eaf0; --dim:#9aa3b2;
+  --accent:#5fd3a6; --accent2:#7aa7ff; --warn:#f0b254; --bad:#ef6a6a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+header{padding:48px 24px 8px; max-width:980px; margin:0 auto}
+h1{margin:0 0 8px; font-size:34px; letter-spacing:-.02em}
+.tagline{margin:0; color:var(--dim); max-width:62ch}
+main{max-width:980px; margin:0 auto; padding:24px}
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:20px 22px; margin:0 0 18px;
+}
+h2{margin:0 0 14px; font-size:18px; display:flex; align-items:center; gap:10px}
+h3{margin:22px 0 8px; font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim)}
+.step{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:24px; height:24px; border-radius:50%; background:var(--accent); color:#0f1115;
+  font-size:13px; font-weight:700; flex:none;
+}
+.row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:10px 0}
+.row label{min-width:110px; color:var(--dim); font-size:13px}
+input[type=text],input[type=search],select{
+  background:#0f1218; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:9px 11px; font:inherit; min-width:150px;
+}
+input[type=text]:focus,input[type=search]:focus,select:focus{outline:2px solid var(--accent2); outline-offset:1px}
+input[type=file]{color:var(--dim); font-size:13px}
+input[type=range]{flex:1; max-width:280px; accent-color:var(--accent)}
+output{font-variant-numeric:tabular-nums; color:var(--accent); font-weight:600}
+button{
+  background:#222734; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:9px 15px; font:inherit; cursor:pointer;
+}
+button:hover:not(:disabled){border-color:var(--accent2)}
+button:disabled{opacity:.5; cursor:default}
+button.primary{background:var(--accent); color:#0f1115; border-color:var(--accent); font-weight:600}
+button.primary:hover:not(:disabled){filter:brightness(1.08)}
+button.big{margin-top:6px; padding:11px 20px; font-size:15px}
+.or{color:var(--dim); font-size:13px; margin:14px 0 6px}
+.hint{color:var(--dim); font-size:13px; margin:8px 0 0; max-width:70ch}
+code{background:#0f1218; border:1px solid var(--line); border-radius:4px; padding:1px 5px; font-size:13px}
+
+.status{margin-top:12px; font-size:14px; min-height:1px}
+.status.working{color:var(--accent2)}
+.status.ok{color:var(--accent)}
+.status.error{color:var(--bad); white-space:pre-wrap}
+
+.picker{border:1px solid var(--line); border-radius:10px; padding:12px; margin:14px 0}
+.reslist{
+  max-height:190px; overflow:auto; display:flex; flex-wrap:wrap; gap:6px;
+  padding:8px; background:#0f1218; border-radius:8px; margin-top:8px;
+}
+.reslist button{
+  padding:4px 9px; font-size:12.5px; border-radius:6px;
+  font-variant-numeric:tabular-nums;
+}
+.reslist button.on{background:var(--accent2); color:#0f1115; border-color:var(--accent2); font-weight:600}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px}
+.cell{background:#0f1218; border:1px solid var(--line); border-radius:9px; padding:11px 13px}
+.cell .k{color:var(--dim); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em}
+.cell .v{font-size:19px; font-weight:600; margin-top:3px; font-variant-numeric:tabular-nums}
+.cell .s{color:var(--dim); font-size:12px; margin-top:2px}
+.shell{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; color:var(--dim); line-height:1.8; word-break:break-word}
+
+.tablewrap{overflow-x:auto; margin-top:4px}
+table{border-collapse:collapse; width:100%; font-size:13.5px}
+th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+th{color:var(--dim); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; font-weight:600}
+tr.named{background:rgba(95,211,166,.07)}
+td.star{color:var(--accent); width:20px}
+td.xyz{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; color:var(--dim); white-space:nowrap}
+td.score{font-variant-numeric:tabular-nums; color:var(--dim)}
+.tag{display:inline-block; padding:2px 8px; border-radius:20px; font-size:12px; background:#222734; border:1px solid var(--line)}
+.tag.anionic{color:var(--bad)} .tag.cationic{color:var(--accent2)}
+.tag.aromatic,.tag.aromatic_and_hbond,.tag.anionic_or_aromatic{color:#c79bf0}
+.tag.hydrophobic{color:var(--warn)}
+.tag.hbond_acceptor,.tag.hbond_mixed,.tag.hbond_acceptor_or_covalent{color:var(--accent)}
+
+.caveat{
+  margin-top:14px; padding:12px 14px; border-left:3px solid var(--warn);
+  background:rgba(240,178,84,.07); color:#e8d7b4; font-size:13.5px; border-radius:0 8px 8px 0;
+}
+footer{max-width:980px; margin:0 auto; padding:8px 24px 56px; color:var(--dim); font-size:13px}
+a{color:var(--accent2)}

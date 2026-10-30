@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alpha-Ligand &mdash; pocket profiler &amp; repressor blueprint</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Alpha&#8209;Ligand</h1>
+  <p class="tagline">Give it a protein structure and its active-site residues. It reads the chemistry
+  of the pocket and works backwards to the blueprint of a ligand that would fill it &mdash; a
+  candidate repressor.</p>
+</header>
+
+<main>
+
+  <!-- ---------------- STEP 1: the structure ---------------- -->
+  <section class="card">
+    <h2><span class="step">1</span> Load a protein structure</h2>
+
+    <div class="row">
+      <label for="pdbcode">PDB code</label>
+      <input id="pdbcode" type="text" maxlength="4" placeholder="3ERT" autocomplete="off">
+      <button id="fetchBtn" class="primary">Fetch from RCSB</button>
+    </div>
+
+    <p class="or">or</p>
+
+    <div class="row">
+      <label for="fileinput">Your own file</label>
+      <input id="fileinput" type="file" accept=".pdb,.ent,.cif,.mmcif,.txt">
+    </div>
+    <p class="hint">Accepts <code>.pdb</code> and <code>.cif</code>. Your file is read inside your own
+    browser and is never uploaded anywhere.</p>
+
+    <div id="loadStatus" class="status"></div>
+  </section>
+
+  <!-- ---------------- STEP 2: the active site ---------------- -->
+  <section class="card" id="siteCard" hidden>
+    <h2><span class="step">2</span> Pick the active-site residues</h2>
+
+    <div class="row">
+      <label for="residues">Residues</label>
+      <input id="residues" type="text" placeholder="A:351,A:383,A:524" autocomplete="off">
+    </div>
+    <p class="hint">Write them as <code>chain:number</code>, separated by commas. Or just click them
+    in the list below.</p>
+
+    <div class="picker">
+      <div class="row">
+        <label for="chainSelect">Chain</label>
+        <select id="chainSelect"></select>
+        <input id="resFilter" type="search" placeholder="filter by number or name, e.g. HIS">
+      </div>
+      <div id="resList" class="reslist"></div>
+    </div>
+
+    <div class="row slider-row">
+      <label for="cutoff">Pocket cutoff</label>
+      <input id="cutoff" type="range" min="4" max="12" step="0.5" value="8">
+      <output id="cutoffOut">8.0 &#8491;</output>
+    </div>
+    <p class="hint">How far around your chosen side chains counts as "the pocket wall". 6 &#8491; keeps
+    to the residues that actually line the site; 8 &#8491; pulls in a second shell behind them.</p>
+
+    <button id="runBtn" class="primary big">Profile this pocket</button>
+    <div id="runStatus" class="status"></div>
+  </section>
+
+  <!-- ---------------- STEP 3: results ---------------- -->
+  <section id="results" hidden>
+
+    <div class="card">
+      <h2><span class="step">3</span> What the pocket is made of</h2>
+      <div id="summaryGrid" class="grid"></div>
+      <h3>Pocket shell</h3>
+      <p id="shellList" class="shell"></p>
+      <h3>Size and shape</h3>
+      <div id="geomGrid" class="grid"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="step">4</span> Working backwards: the ligand blueprint</h2>
+      <p class="hint">Each row says: the pocket offers <em>this</em> here, so your ligand should
+      present the <em>opposite</em> of it at roughly these coordinates. Rows marked
+      <strong>&#9733;</strong> are the residues you named, weighted highest.</p>
+      <div class="tablewrap">
+        <table id="featureTable">
+          <thead><tr>
+            <th></th><th>Pocket residue</th><th>Ligand should bring</th>
+            <th>Suggested chemistry</th><th>Approx. x, y, z</th><th>Score</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="step">5</span> Suggested ligand properties</h2>
+      <div id="propGrid" class="grid"></div>
+      <p id="propBasis" class="hint"></p>
+    </div>
+
+    <div class="card">
+      <h2>Downloads</h2>
+      <p class="hint">Both files are generated here in your browser.</p>
+      <button id="dlTxt">Download report (.txt)</button>
+      <button id="dlJson">Download pharmacophore (.json)</button>
+    </div>
+
+    <div class="card">
+      <h2>How to read this</h2>
+      <p>Section 4 is a <strong>pharmacophore</strong>: a list of the chemical groups a good binder
+      should carry, and roughly where. A positively charged wall wants a negatively charged group
+      on the ligand; an aromatic wall wants a ring to stack against; a greasy wall wants a greasy
+      group. Build or search for a molecule that places those groups near those points, then dock
+      and test it.</p>
+      <p class="caveat" id="disclaimer"></p>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <p>Runs entirely in your browser. No account, no install, nothing uploaded.
+  Structures are fetched from the <a href="https://www.rcsb.org/">RCSB Protein Data Bank</a>.</p>
+</footer>
+
+<script src="core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
