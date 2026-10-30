@@ -4,13 +4,16 @@
 
 **Want the whole pipeline with nothing to install?** Click the badge above - it opens
 `Alpha_Ligand_Pipeline.ipynb` in Google Colab and runs all three steps (profile the
-pocket, build molecules, dock them) on Google's computers, in your browser. See
+pocket, build molecules, dock them, and write the readable report) on Google's computers, in your browser. See
 [Run it in Google Colab](#run-it-in-google-colab-no-install) below.
 
 Two small, beginner-friendly Python tools:
 
 1. **`pocket_profiler.py`** – reads a protein structure, looks at an active site, and works backwards to a blueprint ("pharmacophore") for a ligand that should bind there and repress the protein.
-2. **`plasmid_builder.py`** – takes protein sequences in a FASTA file and designs codon-optimised, His-tagged E. coli genes ready for NdeI/XhoI cloning.
+2. **`ligand_builder.py`** – turns that blueprint into real molecules with 3D coordinates.
+3. **`dock_ligands.py`** – places each molecule in the pocket with AutoDock Vina and scores the fit.
+4. **`make_report.py`** – turns all of that into **one readable HTML page** (plus a CSV) that you can double-click, print, or email to someone who has none of this installed.
+5. **`plasmid_builder.py`** – takes protein sequences in a FASTA file and designs codon-optimised, His-tagged E. coli genes ready for NdeI/XhoI cloning.
 
 ## Setup
 
@@ -302,6 +305,69 @@ between the two.
 What this gives you is a **shortlist**, ranked by one cheap filter, of
 molecules worth testing next. It is a starting point for experiments, not a
 result.
+
+---
+
+## make_report.py - the readable results page
+
+The three steps above leave you with `.json`, `.sdf` and `.txt` files. Useful to a
+computer, not to a person. `make_report.py` reads them all back and writes two files
+that a human can actually use:
+
+| File | What it is |
+| --- | --- |
+| `output/<NAME>_results.html` | **The one you read.** A single web page: ranked molecules with pictures of their structures, docking scores explained in plain English, the properties that matter, the SMILES string to paste into a vendor search, why the pocket asked for that chemistry, and an honest section on what the numbers are not. |
+| `output/<NAME>_top_hits.csv` | The same table for Excel or Google Sheets: rank, name, SMILES, docking score, checklist score, MW, cLogP, HBD, HBA, rotatable bonds, TPSA. |
+
+### Running it
+
+```bash
+# after pocket_profiler.py, ligand_builder.py and (optionally) dock_ligands.py
+python make_report.py output/3ERT_pharmacophore.json
+```
+
+Windows (PowerShell), from the repo folder:
+
+```powershell
+.\venv\Scripts\python.exe make_report.py output\3ERT_pharmacophore.json
+```
+
+It finds `output/3ERT_ligands.sdf` and `output/3ERT_docked.sdf` next to the JSON on
+its own. Point it somewhere else with `--ligands`, `--docked` and `--outdir`.
+
+**If you never ran the docking step**, that is fine - the report is still written, it
+just becomes a *chemistry-only* report, ranked by the checklist score, and it says so
+in a yellow box at the top so nobody mistakes it for a fit prediction.
+
+### Why the HTML file is one file
+
+Everything is embedded inside it: the stylesheet, and every molecule picture as a
+base64 PNG drawn by RDKit's `rdMolDraw2D`. There are no `<link>`s, no `<script>`s, no
+CDNs and no separate image folder. So it:
+
+* opens by double-clicking, on any computer, with no software and no internet;
+* survives being emailed as an attachment or dropped in Slack;
+* prints sensibly - the dark theme switches to a light one in a `@media print` block;
+* is a permanent record of which protein, which residues and which settings gave
+  those hits.
+
+### What it deliberately does not contain
+
+No Kd, no Ki, no IC50, no "predicted affinity in nM". None of those have been
+measured, and a docking score cannot be converted into one. The report says this
+on the page, in a section headed *What these numbers are not*, along with the
+rigid-receptor, stripped-waters and +/-2-3 kcal/mol caveats. Molecules whose scores
+are within 1 kcal/mol of the best are flagged as **statistically tied**, because
+inside that window the ordering is noise.
+
+### Honest limits
+
+* The pictures are 2D sketches of the molecule, not the docked pose. For the pose,
+  open `_docked.sdf` next to the structure in ChimeraX or PyMOL.
+* Properties (MW, cLogP, HBD, HBA, rotatable bonds, TPSA) are RDKit calculations
+  from the 2D structure, not measurements.
+* If there was no control ligand, the report says so loudly: without a known binder
+  to calibrate against, the scores are only comparable with each other.
 
 ---
 

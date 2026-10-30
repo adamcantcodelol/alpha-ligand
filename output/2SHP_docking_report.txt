@@ -1,0 +1,110 @@
+========================================================================
+DOCKING REPORT - 2SHP
+========================================================================
+
+Produced by dock_ligands.py (step 3 of the alpha-ligand pipeline).
+Docking engine: AutoDock Vina. Scores are in kcal/mol; more negative
+means Vina thinks the fit is better.
+
+------------------------------------------------------------------------
+1. WHAT WAS DOCKED, AND WHERE
+------------------------------------------------------------------------
+Receptor               : 2SHP
+Ligand file            : output/2SHP_ligands.sdf
+Pharmacophore blueprint: output/2SHP_pharmacophore.json
+Distinct molecules     : 10 (one 3D start shape each, from 61 SDF entries)
+Search box centre      : x 22.16  y -23.11  z 32.38
+Search box size (Angst): x 26.0  y 26.0  z 26.0
+   The centre is the pocket centroid measured in step 1. The size is
+   the pocket's bounding box plus 2.0 A padding on each side, capped
+   at 26.0 A so the search does not waste time on empty space.
+Exhaustiveness         : 8  (higher = slower, more thorough search)
+Poses kept per molecule: 5
+Random seed            : 42  (same seed = same numbers next time)
+
+Residues meeko could not model and therefore left out of the
+receptor (usually incomplete side chains in the crystal file):
+   'A:235', 'A:294'
+
+------------------------------------------------------------------------
+3. RANKING BY BEST DOCKING SCORE
+------------------------------------------------------------------------
+
+rank molecule                                    best kcal  checklist      MW
+                                                      /mol      0-100        
+------------------------------------------------------------------------------
+1    naphthalene + guanidinomethyl                   -8.72       62.6     199
+2    quinoline + guanidinomethyl                     -8.15       62.6     200
+3    indole + guanidinomethyl                        -7.71       62.6     188
+4    benzofuran + guanidinomethyl                    -7.67       62.6     189
+5    meta-disubst-benzene + guanidinomethyl / p      -7.42       80.8     221
+6    indole-phenol + guanidinomethyl                 -7.09       62.6     204
+7    meta-disubst-benzene + propylamine / tetra      -7.02       78.5     217
+8    phenylalanine-like                              -6.83       76.5     165
+9    para-disubst-benzene + guanidinomethyl / p      -6.79       80.8     221
+10   para-disubst-benzene + propylamine / tetra      -6.72       78.5     217
+
+'checklist' is the step-2 score: how well the molecule's chemical
+groups match what the pocket asks for. It knows nothing about shape.
+'best kcal/mol' is this step: can the molecule physically fit, and
+how favourably. The two often DISAGREE, and that disagreement is the
+whole point of doing this step.
+
+------------------------------------------------------------------------
+4. HOW THE RANKING CHANGED VERSUS THE CHEMISTRY-ONLY SCORE
+------------------------------------------------------------------------
+molecule                                    dock rank  chem rank    moved
+--------------------------------------------------------------------------
+naphthalene + guanidinomethyl                       1          6     up 5
+quinoline + guanidinomethyl                         2          7     up 5
+indole + guanidinomethyl                            3          8     up 5
+benzofuran + guanidinomethyl                        4          9     up 5
+meta-disubst-benzene + guanidinomethyl / p          5          1   down 4
+indole-phenol + guanidinomethyl                     6         10     up 4
+meta-disubst-benzene + propylamine / tetra          7          3   down 4
+phenylalanine-like                                  8          5   down 3
+para-disubst-benzene + guanidinomethyl / p          9          2   down 7
+para-disubst-benzene + propylamine / tetra         10          4   down 6
+
+
+HOW MUCH SHOULD YOU TRUST THESE NUMBERS?
+----------------------------------------
+Read this before you spend any money on the molecules above.
+
+* A Vina score is an EMPIRICAL ESTIMATE, not a measurement. It is a formula
+  fitted to a set of known protein-ligand complexes. It is reported in
+  kcal/mol and more negative means "Vina likes it more".
+
+* Docking scores correlate only LOOSELY with real binding affinity. In
+  published benchmarks the typical error is on the order of 2-3 kcal/mol,
+  which is a 30-100x error in affinity terms. Vina is reasonably good at
+  telling "roughly fits" from "definitely does not fit", and much worse at
+  ranking two molecules that both score well.
+
+* A good score is NOT a validated binder. Molecules that dock beautifully
+  frequently do not bind at all in the test tube. The only way to know is to
+  obtain the compound and measure it.
+
+* No Kd, Ki or IC50 is quoted anywhere in this report, because this
+  calculation cannot produce one. Do not convert these scores into one.
+
+* The protein was treated as RIGID. Real side chains move to accommodate a
+  ligand, so a molecule scored as "too bulky" might still fit in reality,
+  and vice versa.
+
+* Water was removed. Some pockets rely on bridging water molecules, and
+  removing them changes the answer.
+
+* Only one protonation state was used, the default one meeko assigns at
+  roughly pH 7. Charged groups in particular may behave differently.
+
+* Nothing here says anything about whether a molecule is stable, soluble,
+  selective, non-toxic, cell-permeable, synthesisable, or purchasable.
+
+WHAT THIS LIST ACTUALLY IS: a shortlist, ranked by one cheap computational
+filter, of molecules that are worth looking at next. Treat it as a starting
+point for experiments, not as a result.
+
+========================================================================
+END OF REPORT
+========================================================================

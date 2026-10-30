@@ -1,0 +1,1048 @@
+{
+  "structure": "2SHP",
+  "cutoff_A": 6.0,
+  "active_site_residues": [
+    "WA:423",
+    "DA:431",
+    "FA:469",
+    "IA:472",
+    "MA:516"
+  ],
+  "pocket_shell_residues": [
+    "A:230",
+    "A:234",
+    "A:247",
+    "A:325",
+    "A:327",
+    "A:354",
+    "A:356",
+    "A:357",
+    "A:358",
+    "A:361",
+    "A:395",
+    "A:420",
+    "A:421",
+    "A:422",
+    "A:423",
+    "A:424",
+    "A:425",
+    "A:426",
+    "A:427",
+    "A:428",
+    "A:429",
+    "A:430",
+    "A:431",
+    "A:432",
+    "A:433",
+    "A:434",
+    "A:435",
+    "A:436",
+    "A:438",
+    "A:439",
+    "A:442",
+    "A:455",
+    "A:457",
+    "A:464",
+    "A:465",
+    "A:466",
+    "A:467",
+    "A:468",
+    "A:469",
+    "A:470",
+    "A:471",
+    "A:472",
+    "A:473",
+    "A:474",
+    "A:475",
+    "A:476",
+    "A:510",
+    "A:511",
+    "A:512",
+    "A:513",
+    "A:514",
+    "A:515",
+    "A:516",
+    "A:517",
+    "A:518",
+    "A:519",
+    "A:520",
+    "B:359",
+    "B:360"
+  ],
+  "profile": {
+    "n_residues": 59,
+    "composition": {
+      "V": 10,
+      "T": 5,
+      "G": 5,
+      "I": 5,
+      "F": 4,
+      "D": 4,
+      "S": 3,
+      "Y": 3,
+      "R": 3,
+      "P": 3,
+      "L": 3,
+      "K": 2,
+      "E": 2,
+      "H": 2,
+      "Q": 2,
+      "W": 1,
+      "M": 1,
+      "A": 1
+    },
+    "hydrophobic": {
+      "count": 28,
+      "fraction": 0.475
+    },
+    "aromatic": {
+      "count": 10,
+      "fraction": 0.169
+    },
+    "positive": {
+      "count": 5,
+      "fraction": 0.085
+    },
+    "negative": {
+      "count": 6,
+      "fraction": 0.102
+    },
+    "polar_neutral": {
+      "count": 15,
+      "fraction": 0.254
+    },
+    "mean_kd_hydropathy": 0.298,
+    "net_formal_charge_pH7": -1,
+    "sidechain_hbond_donors": 27,
+    "sidechain_hbond_acceptors": 27
+  },
+  "geometry": {
+    "centroid": [
+      22.16,
+      -23.11,
+      32.38
+    ],
+    "bounding_box_xyz": [
+      33.83,
+      31.04,
+      30.7
+    ],
+    "max_atom_span_A": 36.03,
+    "n_pocket_atoms": 571
+  },
+  "solvent_accessibility": {
+    "available": true,
+    "total_pocket_sasa_A2": 453.6,
+    "per_residue_sasa_A2": {
+      "A:230": 0.0,
+      "A:234": 52.8,
+      "A:247": 0.0,
+      "A:325": 0.8,
+      "A:327": 0.0,
+      "A:354": 0.0,
+      "A:356": 0.0,
+      "A:357": 0.0,
+      "A:358": 33.8,
+      "A:361": 7.9,
+      "A:395": 0.0,
+      "A:420": 0.0,
+      "A:421": 43.0,
+      "A:422": 1.2,
+      "A:423": 0.0,
+      "A:424": 22.9,
+      "A:425": 33.3,
+      "A:426": 139.9,
+      "A:427": 6.2,
+      "A:428": 3.1,
+      "A:429": 3.4,
+      "A:430": 12.2,
+      "A:431": 0.0,
+      "A:432": 1.2,
+      "A:433": 8.3,
+      "A:434": 1.2,
+      "A:435": 2.4,
+      "A:436": 7.2,
+      "A:438": 0.0,
+      "A:439": 0.0,
+      "A:442": 0.0,
+      "A:455": 0.0,
+      "A:457": 0.0,
+      "A:464": 0.0,
+      "A:465": 0.0,
+      "A:466": 0.0,
+      "A:467": 0.0,
+      "A:468": 0.0,
+      "A:469": 0.0,
+      "A:470": 0.0,
+      "A:471": 0.0,
+      "A:472": 2.4,
+      "A:473": 0.0,
+      "A:474": 0.0,
+      "A:475": 0.0,
+      "A:476": 0.0,
+      "A:510": 0.0,
+      "A:511": 0.0,
+      "A:512": 39.2,
+      "A:513": 0.0,
+      "A:514": 0.0,
+      "A:515": 1.2,
+      "A:516": 6.0,
+      "A:517": 0.0,
+      "A:518": 2.4,
+      "A:519": 6.8,
+      "A:520": 14.8,
+      "B:359": 0.0,
+      "B:360": 0.0
+    }
+  },
+  "pharmacophore_features": [
+    {
+      "pocket_residue": "DA:431",
+      "pocket_residue_name": "ASP",
+      "is_named_active_site": true,
+      "ligand_feature_type": "cationic",
+      "suggested_ligand_chemistry": "amine / amidine / guanidine",
+      "rationale": "Asp carboxylate: salt bridge",
+      "approx_xyz": [
+        19.29,
+        -14.53,
+        25.56
+      ],
+      "priority_score": 15.0
+    },
+    {
+      "pocket_residue": "WA:423",
+      "pocket_residue_name": "TRP",
+      "is_named_active_site": true,
+      "ligand_feature_type": "aromatic",
+      "suggested_ligand_chemistry": "aryl ring or cation for cation-pi",
+      "rationale": "Trp indole: stacking / cation-pi",
+      "approx_xyz": [
+        18.06,
+        -22.86,
+        36.38
+      ],
+      "priority_score": 13.5
+    },
+    {
+      "pocket_residue": "FA:469",
+      "pocket_residue_name": "PHE",
+      "is_named_active_site": true,
+      "ligand_feature_type": "aromatic",
+      "suggested_ligand_chemistry": "aryl / heteroaryl ring",
+      "rationale": "Phe ring: pi-pi stacking",
+      "approx_xyz": [
+        29.42,
+        -22.41,
+        34.74
+      ],
+      "priority_score": 12.0
+    },
+    {
+      "pocket_residue": "KA:325",
+      "pocket_residue_name": "LYS",
+      "is_named_active_site": false,
+      "ligand_feature_type": "anionic",
+      "suggested_ligand_chemistry": "carboxylate / phosphate",
+      "rationale": "Lys ammonium: salt bridge",
+      "approx_xyz": [
+        35.71,
+        -24.75,
+        32.26
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "KA:358",
+      "pocket_residue_name": "LYS",
+      "is_named_active_site": false,
+      "ligand_feature_type": "anionic",
+      "suggested_ligand_chemistry": "carboxylate / phosphate",
+      "rationale": "Lys ammonium: salt bridge",
+      "approx_xyz": [
+        16.44,
+        -14.24,
+        41.11
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "EA:361",
+      "pocket_residue_name": "GLU",
+      "is_named_active_site": false,
+      "ligand_feature_type": "cationic",
+      "suggested_ligand_chemistry": "amine / amidine / guanidine",
+      "rationale": "Glu carboxylate: salt bridge",
+      "approx_xyz": [
+        16.51,
+        -18.46,
+        43.41
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "DA:395",
+      "pocket_residue_name": "ASP",
+      "is_named_active_site": false,
+      "ligand_feature_type": "cationic",
+      "suggested_ligand_chemistry": "amine / amidine / guanidine",
+      "rationale": "Asp carboxylate: salt bridge",
+      "approx_xyz": [
+        21.56,
+        -12.15,
+        32.2
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "RA:421",
+      "pocket_residue_name": "ARG",
+      "is_named_active_site": false,
+      "ligand_feature_type": "anionic",
+      "suggested_ligand_chemistry": "carboxylate / phosphate / sulfonate",
+      "rationale": "Arg guanidinium: salt bridge + bidentate H-bond",
+      "approx_xyz": [
+        22.76,
+        -8.68,
+        38.8
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "DA:425",
+      "pocket_residue_name": "ASP",
+      "is_named_active_site": false,
+      "ligand_feature_type": "cationic",
+      "suggested_ligand_chemistry": "amine / amidine / guanidine",
+      "rationale": "Asp carboxylate: salt bridge",
+      "approx_xyz": [
+        11.44,
+        -16.99,
+        41.74
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "RA:465",
+      "pocket_residue_name": "ARG",
+      "is_named_active_site": false,
+      "ligand_feature_type": "anionic",
+      "suggested_ligand_chemistry": "carboxylate / phosphate / sulfonate",
+      "rationale": "Arg guanidinium: salt bridge + bidentate H-bond",
+      "approx_xyz": [
+        17.51,
+        -20.93,
+        41.03
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "DA:473",
+      "pocket_residue_name": "ASP",
+      "is_named_active_site": false,
+      "ligand_feature_type": "cationic",
+      "suggested_ligand_chemistry": "amine / amidine / guanidine",
+      "rationale": "Asp carboxylate: salt bridge",
+      "approx_xyz": [
+        32.39,
+        -25.13,
+        32.2
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "RA:512",
+      "pocket_residue_name": "ARG",
+      "is_named_active_site": false,
+      "ligand_feature_type": "anionic",
+      "suggested_ligand_chemistry": "carboxylate / phosphate / sulfonate",
+      "rationale": "Arg guanidinium: salt bridge + bidentate H-bond",
+      "approx_xyz": [
+        11.47,
+        -30.65,
+        26.83
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "EB:359",
+      "pocket_residue_name": "GLU",
+      "is_named_active_site": false,
+      "ligand_feature_type": "cationic",
+      "suggested_ligand_chemistry": "amine / amidine / guanidine",
+      "rationale": "Glu carboxylate: salt bridge",
+      "approx_xyz": [
+        15.28,
+        -11.42,
+        26.65
+      ],
+      "priority_score": 10.0
+    },
+    {
+      "pocket_residue": "YA:327",
+      "pocket_residue_name": "TYR",
+      "is_named_active_site": false,
+      "ligand_feature_type": "aromatic_and_hbond",
+      "suggested_ligand_chemistry": "aryl ring plus an H-bond acceptor",
+      "rationale": "Tyr: stacking ring + donor OH",
+      "approx_xyz": [
+        33.49,
+        -28.35,
+        34.24
+      ],
+      "priority_score": 9.0
+    },
+    {
+      "pocket_residue": "YA:511",
+      "pocket_residue_name": "TYR",
+      "is_named_active_site": false,
+      "ligand_feature_type": "aromatic_and_hbond",
+      "suggested_ligand_chemistry": "aryl ring plus an H-bond acceptor",
+      "rationale": "Tyr: stacking ring + donor OH",
+      "approx_xyz": [
+        18.99,
+        -36.76,
+        27.81
+      ],
+      "priority_score": 9.0
+    },
+    {
+      "pocket_residue": "YA:515",
+      "pocket_residue_name": "TYR",
+      "is_named_active_site": false,
+      "ligand_feature_type": "aromatic_and_hbond",
+      "suggested_ligand_chemistry": "aryl ring plus an H-bond acceptor",
+      "rationale": "Tyr: stacking ring + donor OH",
+      "approx_xyz": [
+        20.84,
+        -35.33,
+        23.69
+      ],
+      "priority_score": 9.0
+    },
+    {
+      "pocket_residue": "FA:247",
+      "pocket_residue_name": "PHE",
+      "is_named_active_site": false,
+      "ligand_feature_type": "aromatic",
+      "suggested_ligand_chemistry": "aryl / heteroaryl ring",
+      "rationale": "Phe ring: pi-pi stacking",
+      "approx_xyz": [
+        15.93,
+        -31.49,
+        23.01
+      ],
+      "priority_score": 8.0
+    },
+    {
+      "pocket_residue": "FA:420",
+      "pocket_residue_name": "PHE",
+      "is_named_active_site": false,
+      "ligand_feature_type": "aromatic",
+      "suggested_ligand_chemistry": "aryl / heteroaryl ring",
+      "rationale": "Phe ring: pi-pi stacking",
+      "approx_xyz": [
+        22.1,
+        -16.45,
+        34.19
+      ],
+      "priority_score": 8.0
+    },
+    {
+      "pocket_residue": "FA:438",
+      "pocket_residue_name": "PHE",
+      "is_named_active_site": false,
+      "ligand_feature_type": "aromatic",
+      "suggested_ligand_chemistry": "aryl / heteroaryl ring",
+      "rationale": "Phe ring: pi-pi stacking",
+      "approx_xyz": [
+        27.97,
+        -17.36,
+        36.5
+      ],
+      "priority_score": 8.0
+    },
+    {
+      "pocket_residue": "HA:426",
+      "pocket_residue_name": "HIS",
+      "is_named_active_site": false,
+      "ligand_feature_type": "anionic_or_aromatic",
+      "suggested_ligand_chemistry": "carboxylate, or aryl ring for stacking",
+      "rationale": "His can be + at pH 7 and also stacks",
+      "approx_xyz": [
+        6.77,
+        -20.07,
+        38.58
+      ],
+      "priority_score": 7.0
+    },
+    {
+      "pocket_residue": "HA:520",
+      "pocket_residue_name": "HIS",
+      "is_named_active_site": false,
+      "ligand_feature_type": "anionic_or_aromatic",
+      "suggested_ligand_chemistry": "carboxylate, or aryl ring for stacking",
+      "rationale": "His can be + at pH 7 and also stacks",
+      "approx_xyz": [
+        23.09,
+        -18.66,
+        21.38
+      ],
+      "priority_score": 7.0
+    },
+    {
+      "pocket_residue": "IA:472",
+      "pocket_residue_name": "ILE",
+      "is_named_active_site": true,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "alkyl group",
+      "rationale": "Ile greasy wall",
+      "approx_xyz": [
+        23.59,
+        -25.88,
+        30.43
+      ],
+      "priority_score": 6.0
+    },
+    {
+      "pocket_residue": "QA:510",
+      "pocket_residue_name": "GLN",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_mixed",
+      "suggested_ligand_chemistry": "H-bond acceptor facing the NH2, donor facing the C=O",
+      "rationale": "Gln amide donates and accepts",
+      "approx_xyz": [
+        17.41,
+        -28.86,
+        37.19
+      ],
+      "priority_score": 6.0
+    },
+    {
+      "pocket_residue": "MA:516",
+      "pocket_residue_name": "MET",
+      "is_named_active_site": true,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "alkyl / thioether-friendly greasy group",
+      "rationale": "Met side chain is soft and greasy",
+      "approx_xyz": [
+        16.67,
+        -26.38,
+        22.65
+      ],
+      "priority_score": 6.0
+    },
+    {
+      "pocket_residue": "QA:519",
+      "pocket_residue_name": "GLN",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_mixed",
+      "suggested_ligand_chemistry": "H-bond acceptor facing the NH2, donor facing the C=O",
+      "rationale": "Gln amide donates and accepts",
+      "approx_xyz": [
+        18.95,
+        -26.35,
+        18.43
+      ],
+      "priority_score": 6.0
+    },
+    {
+      "pocket_residue": "SA:234",
+      "pocket_residue_name": "SER",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_acceptor",
+      "suggested_ligand_chemistry": "carbonyl / ester / ether / N of heteroaryl",
+      "rationale": "Ser OH donates an H-bond",
+      "approx_xyz": [
+        13.16,
+        -29.99,
+        19.88
+      ],
+      "priority_score": 5.0
+    },
+    {
+      "pocket_residue": "TA:356",
+      "pocket_residue_name": "THR",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_acceptor",
+      "suggested_ligand_chemistry": "carbonyl / ether oxygen",
+      "rationale": "Thr OH donates an H-bond",
+      "approx_xyz": [
+        23.28,
+        -22.38,
+        40.79
+      ],
+      "priority_score": 5.0
+    },
+    {
+      "pocket_residue": "TA:357",
+      "pocket_residue_name": "THR",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_acceptor",
+      "suggested_ligand_chemistry": "carbonyl / ether oxygen",
+      "rationale": "Thr OH donates an H-bond",
+      "approx_xyz": [
+        19.44,
+        -19.73,
+        44.72
+      ],
+      "priority_score": 5.0
+    },
+    {
+      "pocket_residue": "TA:422",
+      "pocket_residue_name": "THR",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_acceptor",
+      "suggested_ligand_chemistry": "carbonyl / ether oxygen",
+      "rationale": "Thr OH donates an H-bond",
+      "approx_xyz": [
+        19.97,
+        -13.85,
+        34.97
+      ],
+      "priority_score": 5.0
+    },
+    {
+      "pocket_residue": "SA:430",
+      "pocket_residue_name": "SER",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_acceptor",
+      "suggested_ligand_chemistry": "carbonyl / ester / ether / N of heteroaryl",
+      "rationale": "Ser OH donates an H-bond",
+      "approx_xyz": [
+        13.55,
+        -17.12,
+        28.68
+      ],
+      "priority_score": 5.0
+    },
+    {
+      "pocket_residue": "TA:466",
+      "pocket_residue_name": "THR",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_acceptor",
+      "suggested_ligand_chemistry": "carbonyl / ether oxygen",
+      "rationale": "Thr OH donates an H-bond",
+      "approx_xyz": [
+        24.78,
+        -26.33,
+        42.3
+      ],
+      "priority_score": 5.0
+    },
+    {
+      "pocket_residue": "TA:468",
+      "pocket_residue_name": "THR",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_acceptor",
+      "suggested_ligand_chemistry": "carbonyl / ether oxygen",
+      "rationale": "Thr OH donates an H-bond",
+      "approx_xyz": [
+        20.62,
+        -28.57,
+        35.36
+      ],
+      "priority_score": 5.0
+    },
+    {
+      "pocket_residue": "SA:513",
+      "pocket_residue_name": "SER",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hbond_acceptor",
+      "suggested_ligand_chemistry": "carbonyl / ester / ether / N of heteroaryl",
+      "rationale": "Ser OH donates an H-bond",
+      "approx_xyz": [
+        19.19,
+        -26.6,
+        30.72
+      ],
+      "priority_score": 5.0
+    },
+    {
+      "pocket_residue": "LA:436",
+      "pocket_residue_name": "LEU",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "alkyl group",
+      "rationale": "Leu greasy wall",
+      "approx_xyz": [
+        25.16,
+        -20.81,
+        24.49
+      ],
+      "priority_score": 4.0
+    },
+    {
+      "pocket_residue": "LA:439",
+      "pocket_residue_name": "LEU",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "alkyl group",
+      "rationale": "Leu greasy wall",
+      "approx_xyz": [
+        28.27,
+        -22.93,
+        30.66
+      ],
+      "priority_score": 4.0
+    },
+    {
+      "pocket_residue": "IA:470",
+      "pocket_residue_name": "ILE",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "alkyl group",
+      "rationale": "Ile greasy wall",
+      "approx_xyz": [
+        29.37,
+        -29.07,
+        39.11
+      ],
+      "priority_score": 4.0
+    },
+    {
+      "pocket_residue": "IA:474",
+      "pocket_residue_name": "ILE",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "alkyl group",
+      "rationale": "Ile greasy wall",
+      "approx_xyz": [
+        31.4,
+        -32.39,
+        33.64
+      ],
+      "priority_score": 4.0
+    },
+    {
+      "pocket_residue": "LA:475",
+      "pocket_residue_name": "LEU",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "alkyl group",
+      "rationale": "Leu greasy wall",
+      "approx_xyz": [
+        26.45,
+        -31.81,
+        27.38
+      ],
+      "priority_score": 4.0
+    },
+    {
+      "pocket_residue": "IA:476",
+      "pocket_residue_name": "ILE",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "alkyl group",
+      "rationale": "Ile greasy wall",
+      "approx_xyz": [
+        28.44,
+        -24.65,
+        26.58
+      ],
+      "priority_score": 4.0
+    },
+    {
+      "pocket_residue": "IA:514",
+      "pocket_residue_name": "ILE",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "alkyl group",
+      "rationale": "Ile greasy wall",
+      "approx_xyz": [
+        22.03,
+        -31.15,
+        31.31
+      ],
+      "priority_score": 4.0
+    },
+    {
+      "pocket_residue": "VA:230",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        16.66,
+        -29.29,
+        19.63
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "VA:354",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        28.37,
+        -20.8,
+        38.63
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "VA:428",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        16.25,
+        -24.93,
+        33.56
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "VA:435",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        23.54,
+        -20.5,
+        30.13
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "VA:442",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        33.08,
+        -19.89,
+        35.51
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "VA:455",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        34.14,
+        -23.26,
+        38.55
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "VA:457",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        28.05,
+        -24.78,
+        39.9
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "VA:471",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        25.69,
+        -32.25,
+        31.37
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "VA:518",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        26.4,
+        -28.88,
+        22.56
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "VB:360",
+      "pocket_residue_name": "VAL",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "small alkyl group",
+      "rationale": "Val greasy wall",
+      "approx_xyz": [
+        20.37,
+        -8.81,
+        28.89
+      ],
+      "priority_score": 3.0
+    },
+    {
+      "pocket_residue": "PA:424",
+      "pocket_residue_name": "PRO",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "rigid hydrophobic contact",
+      "rationale": "Pro rigid greasy contact",
+      "approx_xyz": [
+        14.21,
+        -18.97,
+        35.0
+      ],
+      "priority_score": 2.0
+    },
+    {
+      "pocket_residue": "GA:427",
+      "pocket_residue_name": "GLY",
+      "is_named_active_site": false,
+      "ligand_feature_type": "shape",
+      "suggested_ligand_chemistry": "room to grow - Gly leaves space",
+      "rationale": "Gly has no side chain; the pocket is open here",
+      "approx_xyz": [
+        12.19,
+        -23.71,
+        35.04
+      ],
+      "priority_score": 2.0
+    },
+    {
+      "pocket_residue": "PA:429",
+      "pocket_residue_name": "PRO",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "rigid hydrophobic contact",
+      "rationale": "Pro rigid greasy contact",
+      "approx_xyz": [
+        18.7,
+        -19.72,
+        32.93
+      ],
+      "priority_score": 2.0
+    },
+    {
+      "pocket_residue": "PA:432",
+      "pocket_residue_name": "PRO",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "rigid hydrophobic contact",
+      "rationale": "Pro rigid greasy contact",
+      "approx_xyz": [
+        19.74,
+        -19.8,
+        23.71
+      ],
+      "priority_score": 2.0
+    },
+    {
+      "pocket_residue": "GA:433",
+      "pocket_residue_name": "GLY",
+      "is_named_active_site": false,
+      "ligand_feature_type": "shape",
+      "suggested_ligand_chemistry": "room to grow - Gly leaves space",
+      "rationale": "Gly has no side chain; the pocket is open here",
+      "approx_xyz": [
+        22.99,
+        -15.87,
+        24.78
+      ],
+      "priority_score": 2.0
+    },
+    {
+      "pocket_residue": "GA:434",
+      "pocket_residue_name": "GLY",
+      "is_named_active_site": false,
+      "ligand_feature_type": "shape",
+      "suggested_ligand_chemistry": "room to grow - Gly leaves space",
+      "rationale": "Gly has no side chain; the pocket is open here",
+      "approx_xyz": [
+        23.45,
+        -14.57,
+        28.3
+      ],
+      "priority_score": 2.0
+    },
+    {
+      "pocket_residue": "GA:464",
+      "pocket_residue_name": "GLY",
+      "is_named_active_site": false,
+      "ligand_feature_type": "shape",
+      "suggested_ligand_chemistry": "room to grow - Gly leaves space",
+      "rationale": "Gly has no side chain; the pocket is open here",
+      "approx_xyz": [
+        19.83,
+        -29.29,
+        40.24
+      ],
+      "priority_score": 2.0
+    },
+    {
+      "pocket_residue": "GA:467",
+      "pocket_residue_name": "GLY",
+      "is_named_active_site": false,
+      "ligand_feature_type": "shape",
+      "suggested_ligand_chemistry": "room to grow - Gly leaves space",
+      "rationale": "Gly has no side chain; the pocket is open here",
+      "approx_xyz": [
+        24.45,
+        -30.25,
+        38.03
+      ],
+      "priority_score": 2.0
+    },
+    {
+      "pocket_residue": "AA:517",
+      "pocket_residue_name": "ALA",
+      "is_named_active_site": false,
+      "ligand_feature_type": "hydrophobic",
+      "suggested_ligand_chemistry": "methyl-sized contact",
+      "rationale": "Ala small greasy contact",
+      "approx_xyz": [
+        23.26,
+        -24.73,
+        26.86
+      ],
+      "priority_score": 2.0
+    }
+  ],
+  "suggested_ligand_properties": {
+    "molecular_weight_Da": [
+      320.0,
+      590.0
+    ],
+    "clogp": [
+      0.3,
+      3.3
+    ],
+    "rotatable_bonds_max": 7,
+    "hbond_donors": [
+      0,
+      5
+    ],
+    "hbond_acceptors": [
+      1,
+      10
+    ],
+    "suggested_net_charge": 0,
+    "basis": "Derived from pocket span 36.0 A, mean Kyte-Doolittle 0.30 and net pocket charge -1. Rules of thumb only."
+  },
+  "disclaimer": "NOTE: This is a HYPOTHESIS-GENERATING pharmacophore derived purely from the geometry and chemistry of the pocket residues. Nothing here has been docked, scored, simulated or experimentally validated. Treat it as a starting blueprint for designing or searching for a repressor ligand."
+}

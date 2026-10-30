@@ -1,0 +1,83 @@
+========================================================================
+POCKET PROFILE AND COMPLEMENTARY LIGAND BLUEPRINT
+Structure : 2SHP
+Cutoff    : 6.0 A around active-site side chains
+========================================================================
+
+1. ACTIVE SITE RESIDUES YOU NAMED
+   WA:423 (TRP)
+   DA:431 (ASP)
+   FA:469 (PHE)
+   IA:472 (ILE)
+   MA:516 (MET)
+
+2. POCKET SHELL (59 residues within 6.0 A)
+   A:230, A:234, A:247, A:325, A:327, A:354, A:356, A:357, A:358, A:361, A:395, A:420, A:421, A:422, A:423, A:424, A:425, A:426, A:427, A:428, A:429, A:430, A:431, A:432, A:433, A:434, A:435, A:436, A:438, A:439, A:442, A:455, A:457, A:464, A:465, A:466, A:467, A:468, A:469, A:470, A:471, A:472, A:473, A:474, A:475, A:476, A:510, A:511, A:512, A:513, A:514, A:515, A:516, A:517, A:518, A:519, A:520, B:359, B:360
+
+3. CHEMICAL CHARACTER OF THE POCKET
+   Composition          : V=10, T=5, G=5, I=5, F=4, D=4, S=3, Y=3, R=3, P=3, L=3, K=2, E=2, H=2, Q=2, W=1, M=1, A=1
+   Hydrophobic          : 28  (48%)
+   Aromatic             : 10  (17%)
+   Positive (K/R)       : 5  (8%)
+   Negative (D/E)       : 6  (10%)
+   Polar neutral        : 15  (25%)
+   Mean KD hydropathy   : +0.30  (greasy pocket)
+   Net formal charge    : -1 at pH 7
+   Side-chain H-bond    : 27 donors, 27 acceptors
+
+4. POCKET SIZE AND SHAPE
+   Centroid (x,y,z)     : [22.16, -23.11, 32.38]
+   Bounding box (A)     : [33.83, 31.04, 30.7]
+   Max atom span (A)    : 36.03
+   Pocket atoms counted : 571
+   Total pocket SASA    : 453.6 A^2 (Shrake-Rupley)
+
+5. WORKING BACKWARDS: COMPLEMENTARY LIGAND FEATURES (ranked)
+   POCKET RES   LIGAND FEATURE         SUGGESTED CHEMISTRY                APPROX XYZ
+  *DA:431       cationic               amine / amidine / guanidine        [19.29, -14.53, 25.56]
+  *WA:423       aromatic               aryl ring or cation for cation-pi  [18.06, -22.86, 36.38]
+  *FA:469       aromatic               aryl / heteroaryl ring             [29.42, -22.41, 34.74]
+   KA:325       anionic                carboxylate / phosphate            [35.71, -24.75, 32.26]
+   KA:358       anionic                carboxylate / phosphate            [16.44, -14.24, 41.11]
+   EA:361       cationic               amine / amidine / guanidine        [16.51, -18.46, 43.41]
+   DA:395       cationic               amine / amidine / guanidine        [21.56, -12.15, 32.2]
+   RA:421       anionic                carboxylate / phosphate / sulfonat [22.76, -8.68, 38.8]
+   DA:425       cationic               amine / amidine / guanidine        [11.44, -16.99, 41.74]
+   RA:465       anionic                carboxylate / phosphate / sulfonat [17.51, -20.93, 41.03]
+   DA:473       cationic               amine / amidine / guanidine        [32.39, -25.13, 32.2]
+   RA:512       anionic                carboxylate / phosphate / sulfonat [11.47, -30.65, 26.83]
+   EB:359       cationic               amine / amidine / guanidine        [15.28, -11.42, 26.65]
+   YA:327       aromatic_and_hbond     aryl ring plus an H-bond acceptor  [33.49, -28.35, 34.24]
+   YA:511       aromatic_and_hbond     aryl ring plus an H-bond acceptor  [18.99, -36.76, 27.81]
+   YA:515       aromatic_and_hbond     aryl ring plus an H-bond acceptor  [20.84, -35.33, 23.69]
+   FA:247       aromatic               aryl / heteroaryl ring             [15.93, -31.49, 23.01]
+   FA:420       aromatic               aryl / heteroaryl ring             [22.1, -16.45, 34.19]
+   FA:438       aromatic               aryl / heteroaryl ring             [27.97, -17.36, 36.5]
+   HA:426       anionic_or_aromatic    carboxylate, or aryl ring for stac [6.77, -20.07, 38.58]
+   HA:520       anionic_or_aromatic    carboxylate, or aryl ring for stac [23.09, -18.66, 21.38]
+  *IA:472       hydrophobic            alkyl group                        [23.59, -25.88, 30.43]
+   QA:510       hbond_mixed            H-bond acceptor facing the NH2, do [17.41, -28.86, 37.19]
+  *MA:516       hydrophobic            alkyl / thioether-friendly greasy  [16.67, -26.38, 22.65]
+   QA:519       hbond_mixed            H-bond acceptor facing the NH2, do [18.95, -26.35, 18.43]
+   ... 34 more features in the JSON file.
+   (* = residue you named as active site; these are weighted highest.)
+
+6. SUGGESTED LIGAND PROPERTY WINDOWS
+   Molecular weight (Da): 320.0 - 590.0
+   cLogP                : 0.3 - 3.3
+   Rotatable bonds      : <= 7
+   H-bond donors        : 0 - 5
+   H-bond acceptors     : 1 - 10
+   Net charge           : +0
+   Basis                : Derived from pocket span 36.0 A, mean Kyte-Doolittle 0.30 and net pocket charge -1. Rules of thumb only.
+
+7. HOW TO READ THIS
+   Each line in section 5 says: 'the pocket offers X here, so your
+   ligand should present the opposite of X at roughly these
+   coordinates'. Build or search for a molecule that places those
+   groups near those points, then dock and test it.
+
+NOTE: This is a HYPOTHESIS-GENERATING pharmacophore derived purely from
+the geometry and chemistry of the pocket residues. Nothing here has been
+docked, scored, simulated or experimentally validated. Treat it as a
+starting blueprint for designing or searching for a repressor ligand.
