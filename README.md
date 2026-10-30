@@ -49,6 +49,102 @@ No docking, no energy function, no conformational sampling, no estimate of affin
 
 ---
 
+## ligand_builder.py - turning the blueprint into real 3D molecules
+
+`pocket_profiler.py` tells you what chemistry a binder should have.
+`ligand_builder.py` takes that answer and builds actual molecules with real
+3D coordinates you can open in a viewer or hand to a docking program.
+
+### Running it on Windows (PowerShell)
+
+First profile a pocket (this writes the JSON the builder needs):
+
+```
+cd C:\Users\Adam\Downloads\binder-app\alpha-ligand
+.\venv\Scripts\python pocket_profiler.py 3ERT A:351,A:383,A:524 --cutoff 6
+```
+
+Then build the molecules:
+
+```
+.\venv\Scripts\python ligand_builder.py output\3ERT_pharmacophore.json
+```
+
+That's it. Two files appear in `output\`:
+
+* `3ERT_ligands.sdf` - the 3D molecules, several conformers each. Open it in
+  PyMOL, ChimeraX or the free Avogadro.
+* `3ERT_ligand_report.txt` - a plain-English write-up of what was built and why.
+
+### Options
+
+| option | what it does | default |
+| --- | --- | --- |
+| `--outdir` | where to write the two files | `output` |
+| `--top` | how many pharmacophore features to use as the chemistry shopping list | `12` |
+| `--molecules` | how many best-scoring molecules to build in 3D | `10` |
+| `--confs` | 3D conformers (shapes) to generate per molecule | `10` |
+| `--seed` | random seed, so runs are repeatable | `61453` |
+
+Example with more of everything:
+
+```
+.\venv\Scripts\python ligand_builder.py output\3ERT_pharmacophore.json --molecules 20 --confs 25
+```
+
+You need RDKit in the venv for this script:
+
+```
+.\venv\Scripts\pip install rdkit
+```
+
+### How it works, in plain English
+
+1. Reads the pharmacophore JSON and adds up, per chemistry class (cationic,
+   anionic, aromatic, hydrophobic, H-bond donor/acceptor), how loudly the
+   pocket asks for it. That is the "shopping list".
+2. Builds a few hundred candidate molecules by gluing a small hand-written
+   library of ring cores (benzene, indole, quinoline, piperidine, ...) to a
+   small library of substituent groups (amines, carboxylates, tetrazoles,
+   alcohols, greasy alkyls, ...), plus a handful of complete known fragments.
+   RDKit's `Chem.molzip` does the gluing.
+3. Asks RDKit, with SMARTS substructure patterns, which of those chemistry
+   classes each candidate actually contains, and measures its properties
+   (molecular weight, cLogP, H-bond donors/acceptors, rotatable bonds, TPSA).
+4. Gives each candidate a **checklist score out of 100**: 70% for chemistry
+   match against the shopping list, 30% for falling inside the profiler's
+   suggested property windows.
+5. Takes the best ones (at most two per ring core, so the list is varied),
+   generates 3D conformers with RDKit's ETKDGv3 embedder, energy-minimises
+   each one with the MMFF94 force field (UFF as fallback), and writes them
+   to the SDF sorted so the least-strained conformer of each molecule is first.
+
+### Honest limits - please read this bit
+
+**The checklist score is not a binding affinity.** It is not a Kd, Ki, IC50 or
+docking score. It only measures how many boxes on the chemical shopping list a
+molecule ticks and whether it is roughly the right size. Two molecules with the
+same score can bind a thousand-fold differently.
+
+**Nothing is ever placed inside the protein.** The 3D coordinates are the
+molecule's own relaxed shape on its own, not a pose in the pocket. The 3D
+anchor points in the pharmacophore JSON are *not* used to position atoms - only
+the list of feature types is used. A high-scoring molecule may be physically
+unable to fit in the pocket at all.
+
+**The force-field energies are internal strain** of the isolated molecule. They
+are only useful for comparing different shapes of the *same* molecule, never
+for comparing one molecule with another, and never as a binding number.
+
+**The library is a starter kit**, not a real screening collection, and no
+synthetic-accessibility check is done - some assembled molecules would be hard
+or impossible to actually make.
+
+The honest next step is docking (AutoDock Vina or smina) with the SDF and the
+protein structure. That is the first step that tests whether anything fits.
+
+---
+
 ## plasmid_builder.py, section by section
 
 **Section 1 – Constants.** The 20 standard amino acids, the `LEHHHHHH` tag, the NdeI (`CATATG`) and XhoI (`CTCGAG`) sites, the 20–300 aa length limits, and the longest allowed run of a single base.
