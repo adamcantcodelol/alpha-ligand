@@ -140,8 +140,161 @@ for comparing one molecule with another, and never as a binding number.
 synthetic-accessibility check is done - some assembled molecules would be hard
 or impossible to actually make.
 
-The honest next step is docking (AutoDock Vina or smina) with the SDF and the
-protein structure. That is the first step that tests whether anything fits.
+The honest next step is docking, which is now implemented in
+`dock_ligands.py` below. That is the first step that tests whether anything
+physically fits.
+
+---
+
+## dock_ligands.py - does the molecule actually fit the pocket?
+
+Steps 1 and 2 only ever asked *"does this molecule carry the right chemical
+groups?"*. Neither one checked whether the molecule can physically get into the
+pocket. `dock_ligands.py` answers that with **AutoDock Vina**: it places each
+molecule inside the pocket in many orientations and shapes and reports the best
+score it can find, in kcal/mol (more negative = Vina likes it more).
+
+> **This step needs the Python install. It cannot run in the browser web app.**
+> The web app in `docs/` stays the no-setup pocket profiler. RDKit, meeko and
+> Vina are desktop programs - there is no way to run them inside a web page, so
+> molecule building and docking are a local step.
+
+### The full three-step pipeline on Windows (PowerShell)
+
+Open PowerShell and run these one block at a time, from the repo folder.
+
+**One-time setup**
+
+```powershell
+cd C:\Users\Adam\Downloads\binder-app\alpha-ligand
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install biopython dnachisel rdkit meeko scipy gemmi
+```
+
+Then download Vina itself (it is a single program, not a Python package) from
+<https://github.com/ccsb-scripps/AutoDock-Vina/releases> - take the
+`vina_1.2.5_win.exe` file, rename it to `vina.exe`, and put it in this repo
+folder. Check it works:
+
+```powershell
+.\vina.exe --version
+```
+
+**Step 1 - profile the pocket**
+
+```powershell
+python pocket_profiler.py 3ERT A:351,A:383,A:524 --cutoff 6.0
+```
+
+Writes `output\3ERT_pharmacophore.json` and `output\3ERT_pocket_report.txt`.
+
+**Step 2 - build candidate molecules**
+
+```powershell
+python ligand_builder.py output\3ERT_pharmacophore.json
+```
+
+Writes `output\3ERT_ligands.sdf` and `output\3ERT_ligand_report.txt`.
+
+**Step 3 - dock them**
+
+```powershell
+python dock_ligands.py output\3ERT_pharmacophore.json --ligands output\3ERT_ligands.sdf --receptor 3ERT
+```
+
+Writes `output\3ERT_docked.sdf` (the poses, with scores attached) and
+`output\3ERT_docking_report.txt` (the ranking in plain English).
+
+If `vina.exe` is in the repo folder rather than on your PATH, add the folder to
+PATH for that window first:
+
+```powershell
+$env:PATH = "$PWD;$env:PATH"
+```
+
+### Options
+
+| flag | what it does |
+|---|---|
+| `--receptor` | 4-character PDB code (e.g. `3ERT`) **or** a local `.pdb`/`.cif` file |
+| `--ligands` | the SDF from step 2 (required) |
+| `--outdir` | where to write results (default `output`) |
+| `--exhaustiveness` | how hard Vina searches per molecule (default 8; 16-32 is slower and more careful) |
+| `--poses` | poses kept per molecule (default 5) |
+| `--box-padding` | Angstroms added to each side of the pocket's bounding box (default 2.0) |
+| `--max-box` | largest allowed box side (default 26) - stops the search wasting time on empty space |
+| `--chain` | which protein chain to dock into (default: read from the JSON) |
+| `--control-smiles` | SMILES of a molecule already known to bind, docked as a sanity check |
+| `--seed` | random seed, so the same command gives the same numbers |
+| `--keep-temp` | keep the intermediate PDBQT files |
+
+### The sanity check, and why you should always use it
+
+3ERT is the oestrogen receptor with **4-hydroxytamoxifen** bound, so we know
+what a real binder for this pocket looks like. Docking it back in:
+
+```powershell
+python dock_ligands.py output\3ERT_pharmacophore.json --ligands output\3ERT_ligands.sdf --receptor 3ERT --control-smiles "CC/C(=C(\c1ccc(O)cc1)c1ccc(OCCN(C)C)cc1)c1ccccc1" --control-name "4-hydroxytamoxifen_(native)"
+```
+
+gives **-9.58 kcal/mol** for the native ligand, versus **-7.23 to -5.85** for
+the ten generated molecules. That is the result you want from a control: the
+known binder clearly beats the guesses, which means the box and receptor are
+set up sensibly. If the control had scored *worse* than the generated
+molecules, the setup would be wrong and every number would be suspect.
+
+Note what it also tells you: our generated molecules are about 2.4 kcal/mol
+behind the real drug. They are small fragments (MW 165-221 vs 388 for
+tamoxifen), so they simply do not fill the pocket as well.
+
+### How it works, in plain English
+
+**Section 2 – finding the programs.** Looks for `vina` and for meeko's
+`mk_prepare_receptor.py`, and gives a clear message with a download link if
+either is missing.
+
+**Section 3 – the docking box.** Vina only searches inside a box you give it.
+The box centre is the pocket centroid that step 1 measured; the size is the
+pocket bounding box plus padding, capped at `--max-box`.
+
+**Section 4 – preparing the protein.** Biopython writes a cleaned copy:
+one chain, the 20 standard amino acids only, which drops waters, ions and
+crucially **the original bound ligand** (otherwise the pocket would already be
+full). Then meeko adds hydrogens and partial charges and writes PDBQT.
+Residues with incomplete side chains in the crystal file are skipped, and the
+script prints and reports exactly which ones.
+
+**Section 5 – preparing the ligands.** Reads the SDF and keeps one 3D start
+shape per distinct molecule. Vina does its own conformational search, so
+feeding it ten shapes of the same molecule would just repeat work.
+
+**Section 6 – running Vina.** One call per molecule, reading back the
+`REMARK VINA RESULT` scores and converting the posed PDBQT into RDKit
+molecules, one entry per pose.
+
+**Section 7 – the report.** Ranks molecules by their best score, shows the
+step-2 chemistry score next to it, and shows how much the ranking *moved*
+between the two.
+
+### Honest limits - please read this bit
+
+* A Vina score is an **empirical estimate**, not a measurement. Typical error
+  in published benchmarks is 2-3 kcal/mol, which is a 30-100x error in
+  affinity terms.
+* **A good score is not a validated binder.** Molecules that dock beautifully
+  often do not bind at all in the test tube.
+* No Kd, Ki or IC50 appears anywhere, because this calculation cannot produce
+  one. Do not convert the scores into one.
+* The protein is treated as **rigid**. Real side chains move.
+* Water is removed. Some pockets genuinely need bridging waters.
+* One protonation state only, roughly pH 7.
+* Nothing here says anything about stability, solubility, selectivity,
+  toxicity, cell permeability, or whether the molecule can be made or bought.
+
+What this gives you is a **shortlist**, ranked by one cheap filter, of
+molecules worth testing next. It is a starting point for experiments, not a
+result.
 
 ---
 

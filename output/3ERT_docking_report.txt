@@ -1,0 +1,124 @@
+========================================================================
+DOCKING REPORT - 3ERT
+========================================================================
+
+Produced by dock_ligands.py (step 3 of the alpha-ligand pipeline).
+Docking engine: AutoDock Vina. Scores are in kcal/mol; more negative
+means Vina thinks the fit is better.
+
+------------------------------------------------------------------------
+1. WHAT WAS DOCKED, AND WHERE
+------------------------------------------------------------------------
+Receptor               : output/downloads/3ert.cif
+Ligand file            : output/3ERT_ligands.sdf
+Pharmacophore blueprint: output/3ERT_pharmacophore.json
+Distinct molecules     : 10 (one 3D start shape each, from 59 SDF entries)
+Search box centre      : x 31.88  y -0.03  z 21.77
+Search box size (Angst): x 26.0  y 26.0  z 26.0
+   The centre is the pocket centroid measured in step 1. The size is
+   the pocket's bounding box plus 2.0 A padding on each side, capped
+   at 26.0 A so the search does not waste time on empty space.
+Exhaustiveness         : 8  (higher = slower, more thorough search)
+Poses kept per molecule: 5
+Random seed            : 42  (same seed = same numbers next time)
+
+Residues meeko could not model and therefore left out of the
+receptor (usually incomplete side chains in the crystal file):
+   'A:306', 'A:335', 'A:437', 'A:462', 'A:463', 'A:464', 'A:481', 'A:529', 'A:531', 'A:532', 'A:534', 'A:552'
+
+------------------------------------------------------------------------
+2. CONTROL / SANITY CHECK
+------------------------------------------------------------------------
+Control molecule : 4-hydroxytamoxifen_(native)
+SMILES           : CC/C(=C(\c1ccc(O)cc1)c1ccc(OCCN(C)C)cc1)c1ccccc1
+Best Vina score  : -9.58 kcal/mol
+All poses        : -9.58, -7.37, -7.31, -6.71
+
+Why this matters: if a molecule already KNOWN to bind this pocket
+scores poorly here, the setup (box, receptor, protonation) is
+probably wrong and every other number below is suspect. If it
+scores well, the setup is at least self-consistent - that still
+does not make the generated molecules below real binders.
+
+------------------------------------------------------------------------
+3. RANKING BY BEST DOCKING SCORE
+------------------------------------------------------------------------
+
+rank molecule                                    best kcal  checklist      MW
+                                                      /mol      0-100        
+------------------------------------------------------------------------------
+1    para-disubst-benzene + propylamine / tetra      -7.23       79.3     217
+2    quinoline + guanidinomethyl                     -7.22       73.3     200
+3    meta-disubst-benzene + propylamine / tetra      -7.13       79.3     217
+4    para-disubst-benzene + guanidinomethyl / p      -7.12       82.8     221
+5    meta-disubst-benzene + guanidinomethyl / p      -7.11       82.8     221
+6    indole-phenol + guanidinomethyl                 -7.10       73.4     204
+7    indole + guanidinomethyl                        -6.90       70.2     188
+8    benzofuran + guanidinomethyl                    -6.83       73.3     189
+9    phenol + guanidinomethyl                        -6.23       71.5     165
+10   phenylalanine-like                              -5.85       77.4     165
+
+'checklist' is the step-2 score: how well the molecule's chemical
+groups match what the pocket asks for. It knows nothing about shape.
+'best kcal/mol' is this step: can the molecule physically fit, and
+how favourably. The two often DISAGREE, and that disagreement is the
+whole point of doing this step.
+
+------------------------------------------------------------------------
+4. HOW THE RANKING CHANGED VERSUS THE CHEMISTRY-ONLY SCORE
+------------------------------------------------------------------------
+molecule                                    dock rank  chem rank    moved
+--------------------------------------------------------------------------
+para-disubst-benzene + propylamine / tetra          1          3     up 2
+quinoline + guanidinomethyl                         2          7     up 5
+meta-disubst-benzene + propylamine / tetra          3          4     up 1
+para-disubst-benzene + guanidinomethyl / p          4          1   down 3
+meta-disubst-benzene + guanidinomethyl / p          5          2   down 3
+indole-phenol + guanidinomethyl                     6          6     same
+indole + guanidinomethyl                            7         10     up 3
+benzofuran + guanidinomethyl                        8          8     same
+phenol + guanidinomethyl                            9          9     same
+phenylalanine-like                                 10          5   down 5
+
+
+HOW MUCH SHOULD YOU TRUST THESE NUMBERS?
+----------------------------------------
+Read this before you spend any money on the molecules above.
+
+* A Vina score is an EMPIRICAL ESTIMATE, not a measurement. It is a formula
+  fitted to a set of known protein-ligand complexes. It is reported in
+  kcal/mol and more negative means "Vina likes it more".
+
+* Docking scores correlate only LOOSELY with real binding affinity. In
+  published benchmarks the typical error is on the order of 2-3 kcal/mol,
+  which is a 30-100x error in affinity terms. Vina is reasonably good at
+  telling "roughly fits" from "definitely does not fit", and much worse at
+  ranking two molecules that both score well.
+
+* A good score is NOT a validated binder. Molecules that dock beautifully
+  frequently do not bind at all in the test tube. The only way to know is to
+  obtain the compound and measure it.
+
+* No Kd, Ki or IC50 is quoted anywhere in this report, because this
+  calculation cannot produce one. Do not convert these scores into one.
+
+* The protein was treated as RIGID. Real side chains move to accommodate a
+  ligand, so a molecule scored as "too bulky" might still fit in reality,
+  and vice versa.
+
+* Water was removed. Some pockets rely on bridging water molecules, and
+  removing them changes the answer.
+
+* Only one protonation state was used, the default one meeko assigns at
+  roughly pH 7. Charged groups in particular may behave differently.
+
+* Nothing here says anything about whether a molecule is stable, soluble,
+  selective, non-toxic, cell-permeable, synthesisable, or purchasable.
+
+WHAT THIS LIST ACTUALLY IS: a shortlist, ranked by one cheap computational
+filter, of molecules that are worth looking at next. Treat it as a starting
+point for experiments, not as a result.
+
+========================================================================
+END OF REPORT
+========================================================================
