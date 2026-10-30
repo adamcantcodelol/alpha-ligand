@@ -122,6 +122,19 @@
       <p class="caveat" id="disclaimer"></p>
     </div>
 
+    <div class="card colab">
+      <h2>Next step: build and dock molecules</h2>
+      <p>This page does <strong>step 1</strong> &mdash; it profiles the pocket and tells you what
+      chemistry a binder needs. Building actual 3D molecules and docking them into the pocket
+      needs RDKit and AutoDock Vina, which cannot run inside a web page.</p>
+      <p>So they run in a <strong>Google Colab notebook</strong> instead: it is still just a link,
+      still nothing to install, but the work happens on Google's computers rather than in your
+      browser. It runs all three steps, including this one.</p>
+      <p><a class="colab-link" href="https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb" target="_blank" rel="noopener">Open the full pipeline in Google Colab &rarr;</a></p>
+      <p class="hint">Scores there are empirical docking estimates, not binding affinities. A good
+      score is a reason to test a molecule, not proof that it binds.</p>
+    </div>
+
   </section>
 
 </main>

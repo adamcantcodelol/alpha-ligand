@@ -1,5 +1,12 @@
 # binder-app
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb)
+
+**Want the whole pipeline with nothing to install?** Click the badge above - it opens
+`Alpha_Ligand_Pipeline.ipynb` in Google Colab and runs all three steps (profile the
+pocket, build molecules, dock them) on Google's computers, in your browser. See
+[Run it in Google Colab](#run-it-in-google-colab-no-install) below.
+
 Two small, beginner-friendly Python tools:
 
 1. **`pocket_profiler.py`** – reads a protein structure, looks at an active site, and works backwards to a blueprint ("pharmacophore") for a ligand that should bind there and repress the protein.
@@ -314,3 +321,31 @@ result.
 
 ### Honest limits
 The output is the **insert only** – no plasmid backbone is invented anywhere. You paste this into a real NdeI/XhoI vector you already have (e.g. a pET plasmid). The DNA Chisel codon table for E. coli comes bundled with the library.
+
+---
+
+## Run it in Google Colab (no install)
+
+`Alpha_Ligand_Pipeline.ipynb` is a notebook that runs the full three-step pipeline
+in a browser tab. Nothing is installed on your computer: Colab gives you a free
+Linux machine, the notebook installs RDKit, Biopython, meeko and the Linux build of
+AutoDock Vina on it, clones this repo, and runs the three scripts.
+
+**Link:** <https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb>
+
+You click the play button on each cell, top to bottom. The default example is `3ERT`
+with active-site residues `A:351,A:383,A:524`, and it docks 4-hydroxytamoxifen (the
+drug that really binds that pocket) as a control. The last cell downloads the result
+files - reports, the generated molecules and the docked poses - to your computer.
+
+Things to know:
+
+* The install cell takes a few minutes, and must be re-run if Colab disconnects your
+  session.
+* A free Colab machine is reclaimed when idle. Nothing is lost except time; re-run
+  from the top.
+* The same honesty applies as everywhere else here: Vina scores are empirical
+  estimates, not affinities, and a good score is not a validated binder.
+
+The web app in `docs/` still does step 1 alone, with no notebook at all:
+<https://adamcantcodelol.github.io/alpha-ligand/>
