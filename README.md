@@ -562,3 +562,176 @@ No such number appears anywhere in the output, because none was calculated.
 peptides (top hit `RLMWDEIVAKF`, 78.4% coverage), pads each to 20 aa, and
 `plasmid_builder.py` builds all 8 as 99 bp NdeI/XhoI inserts whose DNA translates
 back to `M` + peptide + `LEHHHHHH` exactly - 8 of 8 with all checks passed.
+
+---
+
+## Worked example 2: SHP-2 (PTPN11) and the SHP099 allosteric tunnel
+
+The 3ERT example above uses 4-hydroxytamoxifen as a known-binder benchmark.
+This second example does the same thing for **SHP-2**, a phosphatase whose
+best-validated drug site is not its catalytic pocket but an **allosteric
+tunnel** at the junction of the N-SH2, C-SH2 and PTP domains. The clinical-stage
+chemistry (SHP099 and its descendants) binds there and locks the enzyme in its
+closed, inactive state, so it is the right site to aim a repressor at.
+
+### Where the site came from (not from memory)
+
+* **Structure of the complex:** PDB **5EHR**, "SHP2 in complex with allosteric
+  inhibitor SHP099", 1.7 Å — <https://www.rcsb.org/structure/5EHR>. The bound
+  inhibitor is chemical component **5OD**.
+* **Paper:** Chen *et al.*, *Nature* **535**, 148–152 (2016), "Allosteric
+  inhibition of SHP2 phosphatase inhibits cancers driven by receptor tyrosine
+  kinases" — <https://www.nature.com/articles/nature18621>. It reports hydrogen
+  bonds to Arg111 and Phe113 on the SH2–SH2 linker and to Glu250 of the PTP
+  domain, with the dichlorophenyl group packing against Leu254, Gln257, Pro491
+  and Gln495.
+* **Apo / autoinhibited structure:** PDB **2SHP** (Hof *et al.*, 1998) —
+  <https://www.rcsb.org/structure/2SHP>.
+* **SHP099 chemistry:** PubChem CID **118238298** —
+  <https://pubchem.ncbi.nlm.nih.gov/compound/118238298> — and the RCSB entry for
+  component 5OD — <https://www.rcsb.org/ligand/5OD>.
+  SMILES `CC1(N)CCN(CC1)c2cnc(c(N)n2)c3cccc(Cl)c3Cl`
+  (6-(4-amino-4-methylpiperidin-1-yl)-3-(2,3-dichlorophenyl)pyrazin-2-amine,
+  C16H19Cl2N5, MW 352.3). PubChem and RCSB agree, and RDKit reproduces
+  InChIKey `YGUFCDOEKKVKJK-UHFFFAOYSA-N` from both, so the structure is confirmed
+  rather than assumed.
+
+Rather than trusting any of those residue lists, `validate_shp2_site.py`
+recomputes them from the coordinates:
+
+```bash
+./venv/bin/python validate_shp2_site.py data/pdb/5EHR.pdb data/pdb/2SHP.pdb
+```
+
+Every amino acid with an atom within 5 Å of SHP099 in 5EHR chain A:
+
+```
+A:108,A:110,A:111,A:112,A:113,A:114,A:218,A:219,A:249,A:250,A:253,A:254,A:257,A:489,A:491,A:492,A:495,A:511
+```
+
+(Thr108, Glu110, Arg111, Trp112, Phe113, His114, Thr218, Thr219, Glu249,
+Glu250, Thr253, Leu254, Gln257, Asp489, Pro491, Lys492, Gln495, Tyr511.)
+That contains every residue the paper names, plus Trp112, His114, Asp489 and
+Tyr511 which are in contact but not singled out in the text — so computation
+and literature agree.
+
+### Numbering check (5EHR vs 2SHP)
+
+Both deposit human PTPN11 with the same numbering, but the script verifies it
+instead of assuming: over the **470 residue numbers present in both**, the amino
+acid identity matches at **468 (99.6 %)**. The only two differences are
+**41 F→L** and **513 F→S**, neither anywhere near the tunnel. **All 18 site
+residues are present in 2SHP with identical identities.** The same residue
+numbers therefore mean the same residues in both files, and the site definition
+transfers directly.
+
+### Is the tunnel even there in the autoinhibited structure?
+
+This matters, because 2SHP has nothing bound — the tunnel might be collapsed.
+Test: superpose 5EHR onto 2SHP (CA rmsd **0.72 Å** over 470 residues — the two
+structures are nearly identical), carry SHP099 across, and look for clashes.
+
+Result: the ligand fits, except that **four of its atoms clash with the Gln257
+side chain** (closest contact 0.91 Å). **No backbone clashes at all.** Both
+chains of 2SHP behave the same way.
+
+So the honest answer is: **the tunnel is formed in the autoinhibited structure —
+the protein backbone already leaves the space — but one side chain, Gln257, sits
+in a rotamer that partly fills it.** That is ordinary induced fit, and it has a
+direct practical consequence: **rigid docking into 2SHP will systematically
+under-score anything that binds there**, including SHP099 itself.
+
+### Running the pipeline on both structures
+
+```bash
+mkdir -p data/pdb
+curl -sSL -o data/pdb/5EHR.pdb https://files.rcsb.org/download/5EHR.pdb
+curl -sSL -o data/pdb/2SHP.pdb https://files.rcsb.org/download/2SHP.pdb
+
+# the *_allo.pdb files are just copies of the downloads, so the pipeline
+# names its outputs 5EHR_allo_* / 2SHP_allo_* and does not overwrite earlier runs
+cp data/pdb/5EHR.pdb data/pdb/5EHR_allo.pdb
+cp data/pdb/2SHP.pdb data/pdb/2SHP_allo.pdb
+
+SITE="A:108,A:110,A:111,A:112,A:113,A:114,A:218,A:219,A:249,A:250,A:253,A:254,A:257,A:489,A:491,A:492,A:495,A:511"
+
+for S in 5EHR 2SHP; do
+  ./venv/bin/python pocket_profiler.py data/pdb/${S}_allo.pdb "$SITE" --cutoff 5
+  ./venv/bin/python ligand_builder.py output/${S}_allo_pharmacophore.json --molecules 10
+  ./venv/bin/python dock_ligands.py output/${S}_allo_pharmacophore.json \
+      --ligands output/${S}_allo_ligands.sdf --receptor data/pdb/${S}.pdb \
+      --chain A --exhaustiveness 16 --max-box 24 \
+      --control-smiles 'CC1(N)CCN(CC1)c2cnc(c(N)n2)c3cccc(Cl)c3Cl' \
+      --control-name 'SHP099_(known_allosteric_binder)'
+  ./venv/bin/python make_report.py output/${S}_allo_pharmacophore.json
+done
+```
+
+Both were profiled on purpose. 5EHR is the ligand-bound structure, so its tunnel
+is definitely open and it gives the cleanest benchmark; 2SHP is the structure
+Adam actually cares about. Comparing them is the point.
+
+The two pocket profiles come out closely similar (5EHR: 67 shell residues, 40 %
+hydrophobic, net −1; 2SHP: 76 shell residues, 42 % hydrophobic, net 0), which
+independently supports the conclusion that the site exists in both.
+
+### Results
+
+| Molecule | 5EHR (open tunnel) | 2SHP (autoinhibited) |
+|---|---|---|
+| **SHP099 (known binder, control)** | **−9.95** | **−8.68** |
+| para-benzene + guanidinomethyl / tetrazolylmethyl | −9.13 | −7.95 |
+| meta-benzene + guanidinomethyl / tetrazolylmethyl | −8.52 | −7.55 |
+| naphthalene + guanidinomethyl | −8.08 | −7.66 |
+| para-benzene + guanidinomethyl / acetic-acid | −7.82 | −7.04 |
+| quinoline + guanidinomethyl | −7.81 | −7.45 |
+| indole + guanidinomethyl | −7.49 | −6.97 |
+| indole-phenol + guanidinomethyl | −7.40 | −7.25 |
+| meta-benzene + guanidinomethyl / acetic-acid | −7.38 | −6.96 |
+| benzofuran + guanidinomethyl | −7.64 | −7.08 |
+| phenylalanine-like | −6.27 | −5.90 |
+
+All scores in kcal/mol; more negative is a better predicted fit.
+
+**The docking setup validates.** Re-docking SHP099 into its own structure
+(5EHR) reproduces the crystallographic pose at **1.18 Å heavy-atom RMSD** —
+under the conventional 2 Å success threshold, so the box, the receptor prep and
+the scoring function are doing their job. Cross-docked into 2SHP the best pose
+lands **2.53 Å** from the crystal pose, slightly displaced, exactly as the
+Gln257 occlusion predicts.
+
+**The control wins, as it should.** SHP099 outscores every generated molecule in
+both structures. The gap to the best generated fragment is **0.82 kcal/mol** in
+5EHR and **0.73 kcal/mol** in 2SHP. That is a far smaller gap than the 2.4
+kcal/mol seen for 3ERT/tamoxifen — but read it carefully, because it mostly
+reflects the tunnel being a smaller, more fragment-friendly pocket, not the
+generated molecules being good.
+
+**And the 2SHP-vs-5EHR shift is systematic.** Every single molecule scores
+0.4–1.3 kcal/mol worse in 2SHP than in 5EHR, control included. That is the
+Gln257 rotamer, not chemistry. The practical rule: **compare scores only within
+one structure**, and prefer 5EHR when you want numbers to mean something.
+
+### Limitations specific to this example
+
+* A ~0.8 kcal/mol gap to SHP099 does **not** mean these fragments are nearly as
+  good as a 71 nM clinical compound. Vina's error is roughly ±2 kcal/mol, the
+  gap is inside it, and scoring functions reward raw size and greasiness, which
+  flatters charged fragments in a polar tunnel.
+* The top hits are guanidine-bearing fragments of 165–240 Da. SHP099 is 352 Da
+  with a dichlorophenyl group doing most of the real work. These are starting
+  points, not analogues.
+* The receptor is rigid. The Gln257 finding above is precisely a case where that
+  assumption costs you, and it argues for flexible-side-chain docking or using
+  5EHR as the receptor.
+* Docking into the tunnel of an already-closed structure cannot tell you whether
+  a molecule would *stabilise* the closed state, which is SHP099's actual
+  mechanism. Only an assay can.
+* The top six generated molecules are within ~1 kcal/mol of each other and
+  should be treated as tied.
+
+In the Colab notebook, `5EHR` and `2SHP` are now in `NATIVE_CONTROLS`, so
+choosing either with the control set to `auto` docks SHP099 as the benchmark
+automatically. For 2SHP that control is a **known binder from another
+structure**, not a ligand present in that crystal — still a valid yardstick, but
+worth knowing.

@@ -1,0 +1,180 @@
+========================================================================
+LIGAND BUILDER REPORT - 2SHP_allo
+========================================================================
+
+Input pharmacophore file : output/2SHP_allo_pharmacophore.json
+Active-site residues     : TA:108, EA:110, RA:111, WA:112, FA:113, HA:114, TA:218, TA:219, EA:249, EA:250, TA:253, LA:254, QA:257, DA:489, PA:491, KA:492, QA:495, YA:511
+Pocket shell residues    : 76
+Pocket max atom span     : 40.77 A
+Conformers requested     : 10 per molecule
+
+------------------------------------------------------------------------
+1. WHAT THE POCKET ASKED FOR (top 12 features, by priority)
+------------------------------------------------------------------------
+Each number is the total priority pocket_profiler.py gave that kind
+of chemistry. Higher = the pocket wall asks for it more insistently.
+
+   cationic         demand weight   70.0
+   anionic          demand weight   45.2
+   aromatic         demand weight   37.5
+   hbond_acceptor   demand weight    6.8
+
+Suggested property windows taken from the profiler:
+   molecular weight : [360.0, 650] Da
+   cLogP            : [-0.5, 2.5]
+   H-bond donors    : [0, 5]
+   H-bond acceptors : [1, 10]
+   rotatable bonds  : max 8
+
+------------------------------------------------------------------------
+2. THE MOLECULES, BEST CHECKLIST MATCH FIRST
+------------------------------------------------------------------------
+
+#1   para-disubst-benzene + guanidinomethyl / tetrazolylmethyl
+     SMILES          : N=C(N)NCc1ccc(Cc2nnn[nH]2)cc1
+     source          : assembled
+     checklist score : 83.9 / 100   (chemistry 86%, size-window fit 80%)
+     properties      : MW 231.3 | cLogP -0.23 | HBD 4 | HBA 4 | RotB 4 | TPSA 116.4 | charge +0
+     features found  : anionic x1, aromatic x2, cationic x2, hbond_acceptor x3
+     outside window  : MW 231.3 (want 360.0-650.0)
+     3D conformers   : 4 written, minimised with MMFF94
+     force-field energy range: -134.7 to -133.5 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+#2   meta-disubst-benzene + guanidinomethyl / tetrazolylmethyl
+     SMILES          : N=C(N)NCc1cccc(Cc2nnn[nH]2)c1
+     source          : assembled
+     checklist score : 83.9 / 100   (chemistry 86%, size-window fit 80%)
+     properties      : MW 231.3 | cLogP -0.23 | HBD 4 | HBA 4 | RotB 4 | TPSA 116.4 | charge +0
+     features found  : anionic x1, aromatic x2, cationic x2, hbond_acceptor x3
+     outside window  : MW 231.3 (want 360.0-650.0)
+     3D conformers   : 6 written, minimised with MMFF94
+     force-field energy range: -137.9 to -133.1 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+#3   para-disubst-benzene + guanidinomethyl / acetic-acid
+     SMILES          : N=C(N)NCc1ccc(CC(=O)O)cc1
+     source          : assembled
+     checklist score : 81.4 / 100   (chemistry 82%, size-window fit 80%)
+     properties      : MW 207.2 | cLogP 0.30 | HBD 4 | HBA 2 | RotB 4 | TPSA 99.2 | charge +0
+     features found  : anionic x1, aromatic x1, cationic x2, hbond_acceptor x2
+     outside window  : MW 207.2 (want 360.0-650.0)
+     3D conformers   : 5 written, minimised with MMFF94
+     force-field energy range: -137.7 to -135.4 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+#4   meta-disubst-benzene + guanidinomethyl / acetic-acid
+     SMILES          : N=C(N)NCc1cccc(CC(=O)O)c1
+     source          : assembled
+     checklist score : 81.4 / 100   (chemistry 82%, size-window fit 80%)
+     properties      : MW 207.2 | cLogP 0.30 | HBD 4 | HBA 2 | RotB 4 | TPSA 99.2 | charge +0
+     features found  : anionic x1, aromatic x1, cationic x2, hbond_acceptor x2
+     outside window  : MW 207.2 (want 360.0-650.0)
+     3D conformers   : 7 written, minimised with MMFF94
+     force-field energy range: -137.7 to -135.3 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+#5   phenylalanine-like
+     SMILES          : NC(Cc1ccccc1)C(=O)O
+     source          : known fragment
+     checklist score : 76.9 / 100   (chemistry 76%, size-window fit 80%)
+     properties      : MW 165.2 | cLogP 0.64 | HBD 2 | HBA 2 | RotB 3 | TPSA 63.3 | charge +0
+     features found  : anionic x1, aromatic x1, cationic x1, hbond_acceptor x2
+     outside window  : MW 165.2 (want 360.0-650.0)
+     3D conformers   : 5 written, minimised with MMFF94
+     force-field energy range: 49.8 to 52.3 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+#6   benzofuran + guanidinomethyl
+     SMILES          : N=C(N)NCc1cc2ccccc2o1
+     source          : assembled
+     checklist score : 68.4 / 100   (chemistry 63%, size-window fit 80%)
+     properties      : MW 189.2 | cLogP 1.42 | HBD 3 | HBA 2 | RotB 2 | TPSA 75.0 | charge +0
+     features found  : aromatic x2, cationic x2, hbond_acceptor x1
+     features MISSING: anionic
+     outside window  : MW 189.2 (want 360.0-650.0)
+     3D conformers   : 4 written, minimised with MMFF94
+     force-field energy range: -133.5 to -132.4 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+#7   quinoline + guanidinomethyl
+     SMILES          : N=C(N)NCc1ccc2ccccc2n1
+     source          : assembled
+     checklist score : 68.4 / 100   (chemistry 63%, size-window fit 80%)
+     properties      : MW 200.2 | cLogP 1.22 | HBD 3 | HBA 2 | RotB 2 | TPSA 74.8 | charge +0
+     features found  : aromatic x2, cationic x2, hbond_acceptor x1
+     features MISSING: anionic
+     outside window  : MW 200.2 (want 360.0-650.0)
+     3D conformers   : 6 written, minimised with MMFF94
+     force-field energy range: -103.5 to -100.5 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+#8   indole-phenol + guanidinomethyl
+     SMILES          : N=C(N)NCc1cc2cc(O)ccc2[nH]1
+     source          : assembled
+     checklist score : 68.4 / 100   (chemistry 63%, size-window fit 80%)
+     properties      : MW 204.2 | cLogP 0.86 | HBD 5 | HBA 2 | RotB 2 | TPSA 97.9 | charge +0
+     features found  : aromatic x2, cationic x2, hbond_acceptor x1
+     features MISSING: anionic
+     outside window  : MW 204.2 (want 360.0-650.0)
+     3D conformers   : 6 written, minimised with MMFF94
+     force-field energy range: -162.2 to -159.3 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+#9   indole + guanidinomethyl
+     SMILES          : N=C(N)NCc1cc2ccccc2[nH]1
+     source          : assembled
+     checklist score : 66.2 / 100   (chemistry 60%, size-window fit 80%)
+     properties      : MW 188.2 | cLogP 1.15 | HBD 4 | HBA 1 | RotB 2 | TPSA 77.7 | charge +0
+     features found  : aromatic x2, cationic x2
+     features MISSING: anionic, hbond_acceptor
+     outside window  : MW 188.2 (want 360.0-650.0)
+     3D conformers   : 4 written, minimised with MMFF94
+     force-field energy range: -151.7 to -147.5 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+#10  naphthalene + guanidinomethyl
+     SMILES          : N=C(N)NCc1ccc2ccccc2c1
+     source          : assembled
+     checklist score : 66.2 / 100   (chemistry 60%, size-window fit 80%)
+     properties      : MW 199.3 | cLogP 1.82 | HBD 3 | HBA 1 | RotB 2 | TPSA 61.9 | charge +0
+     features found  : aromatic x2, cationic x2
+     features MISSING: anionic, hbond_acceptor
+     outside window  : MW 199.3 (want 360.0-650.0)
+     3D conformers   : 4 written, minimised with MMFF94
+     force-field energy range: -120.7 to -119.2 kcal/mol (INTERNAL strain of the molecule alone - NOT binding energy)
+
+------------------------------------------------------------------------
+3. WHAT THE SCORE MEANS, AND WHAT IT DOES NOT
+------------------------------------------------------------------------
+
+The checklist score is built from exactly two things:
+  (a) 70% - chemistry match. For each feature class the pocket asked
+      for (cationic, aromatic, hydrophobic, ...), does this molecule
+      contain a group of that kind? Found via RDKit SMARTS pattern
+      matching. Having one counts for most of the credit; extra
+      copies add a little more, with diminishing returns.
+  (b) 30% - property-window fit. The fraction of the five suggested
+      windows (MW, cLogP, HBD, HBA, rotatable bonds) the molecule
+      falls inside.
+
+The score is therefore a measure of CHEMICAL SHOPPING-LIST COVERAGE.
+
+It is NOT:
+  - a binding affinity, Kd, Ki or IC50;
+  - a docking score;
+  - an interaction energy with the protein;
+  - evidence that the molecule fits in the pocket at all.
+
+Nothing in this script ever puts a molecule inside the protein. The
+3D coordinates are the molecule's own relaxed shape in a vacuum, not
+a pose in the binding site. The geometry of the pharmacophore (the
+3D anchor points in the JSON) is NOT used to place atoms - only the
+list of feature TYPES is used. Two molecules with identical scores
+can differ a thousand-fold in real affinity, and a high-scoring
+molecule may be sterically unable to enter the pocket.
+
+The force-field energies are internal strain of the isolated
+molecule, useful only for comparing conformers of the SAME molecule.
+
+The candidate library is a small hand-written starter kit (14 scaffolds,
+21 substituent groups, 9 known fragments), not a real screening
+collection. Many of the assembled molecules may be hard or impossible
+to synthesise; no synthetic accessibility check is done.
+
+HONEST NEXT STEP: feed the SDF file to a docking program
+(AutoDock Vina or smina) together with the protein structure. That is
+the first step that actually tests fit. Even then, docking scores are
+weak predictors and only an experiment settles it.
+
