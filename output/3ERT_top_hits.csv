@@ -1,12 +1,12 @@
 rank,molecule_name,smiles,docking_score_kcal_per_mol,checklist_score_0_100,molecular_weight_Da,clogp,hbond_donors,hbond_acceptors,rotatable_bonds,tpsa,source,is_control,tied_with_best
-1,para-disubst-benzene + propylamine / tetrazolylmethyl,NCCCc1ccc(Cc2nnn[nH]2)cc1,-7.23,79.3,217.3,0.68,2,4,5,80.5,assembled,no,yes
-2,quinoline + guanidinomethyl,N=C(N)NCc1ccc2ccccc2n1,-7.22,73.3,200.2,1.22,3,2,2,74.8,assembled,no,yes
-3,meta-disubst-benzene + propylamine / tetrazolylmethyl,NCCCc1cccc(Cc2nnn[nH]2)c1,-7.13,79.3,217.3,0.68,2,4,5,80.5,assembled,no,yes
-4,para-disubst-benzene + guanidinomethyl / propanoic-acid,N=C(N)NCc1ccc(CCC(=O)O)cc1,-7.12,82.8,221.3,0.69,4,2,5,99.2,assembled,no,yes
-5,meta-disubst-benzene + guanidinomethyl / propanoic-acid,N=C(N)NCc1cccc(CCC(=O)O)c1,-7.11,82.8,221.3,0.69,4,2,5,99.2,assembled,no,yes
-6,indole-phenol + guanidinomethyl,N=C(N)NCc1cc2cc(O)ccc2[nH]1,-7.10,73.4,204.2,0.86,5,2,2,97.9,assembled,no,yes
-7,indole + guanidinomethyl,N=C(N)NCc1cc2ccccc2[nH]1,-6.90,70.2,188.2,1.15,4,1,2,77.7,assembled,no,yes
-8,benzofuran + guanidinomethyl,N=C(N)NCc1cc2ccccc2o1,-6.83,73.3,189.2,1.42,3,2,2,75.0,assembled,no,yes
-9,phenol + guanidinomethyl,N=C(N)NCc1ccc(O)cc1,-6.23,71.5,165.2,0.38,4,2,2,82.1,assembled,no,no
-10,phenylalanine-like,NC(Cc1ccccc1)C(=O)O,-5.85,77.4,165.2,0.64,2,2,3,63.3,known fragment,no,no
+1,CHEMBL90675,N[C@H](C(=O)O)[C@H]1[C@@H](CCC2c3ccccc3Oc3ccccc32)[C@@H]1C(=O)O,-9.04,87.9,367.4,3.06,3,4,6,109.8,ChEMBL 37 (chemreps) (real compound library),no,yes
+2,CHEMBL38239,O=C(Nc1ccc(C2CC2C(=O)O)cc1)c1cccc(NC2=NCCCN2)c1,-8.75,91.0,378.4,2.89,4,5,5,102.8,ChEMBL 37 (chemreps) (real compound library),no,yes
+3,CHEMBL9541,O=C(O)c1ccc(Sc2ccc(NC3=NCCN3)cc2)cc1,-8.37,90.6,313.4,2.91,3,5,4,73.7,ChEMBL 37 (chemreps) (real compound library),no,yes
+4,CHEMBL61281,N[C@]1(C(=O)O)C[C@H](C(=O)O)N(Cc2ccc3ccccc3c2)C1,-7.65,87.9,314.3,1.28,3,4,4,103.9,ChEMBL 37 (chemreps) (real compound library),no,no
+5,CHEMBL113191,CC(=O)N[C@H]1[C@H](N(C)CCc2ccccc2)C=C(C(=O)O)C[C@@H]1N,-7.54,89.0,331.4,0.78,3,4,6,95.7,ChEMBL 37 (chemreps) (real compound library),no,no
+6,CHEMBL192543,CC(C)NC1=NS(=O)(=O)c2cc(C(=O)O)ccc2N1,-7.09,89.2,283.3,0.85,3,5,2,107.9,ChEMBL 37 (chemreps) (real compound library),no,no
+7,CHEMBL112095,CN1CCN(C2=Nc3ccccc3C(CC(=O)O)N2c2ccccc2)CC1,-7.06,90.3,364.4,2.96,1,5,3,59.4,ChEMBL 37 (chemreps) (real compound library),no,no
+8,CHEMBL192542,CCCNC1=NS(=O)(=O)c2cc(C(=O)O)ccc2N1,-7.04,89.2,283.3,0.85,3,5,3,107.9,ChEMBL 37 (chemreps) (real compound library),no,no
+9,CHEMBL115251,O=C(O)CC1c2ccccc2N=C(N2CCOCC2)N1c1ccccc1,-6.96,90.6,351.4,3.04,1,5,3,65.4,ChEMBL 37 (chemreps) (real compound library),no,no
+10,CHEMBL32069,CN(C)CCn1cc(C(=O)O)c(=O)c2cc(F)c(N3CCNCC3)cc21,-6.89,90.5,362.4,0.81,2,5,5,77.8,ChEMBL 37 (chemreps) (real compound library),no,no
 ,4-hydroxytamoxifen_(native),CC/C(=C(\c1ccc(O)cc1)c1ccc(OCCN(C)C)cc1)c1ccccc1,-9.58,,387.5,5.7,1,3,8,32.7,control,yes,no

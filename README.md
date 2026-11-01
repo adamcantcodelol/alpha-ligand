@@ -11,6 +11,11 @@ Two small, beginner-friendly Python tools:
 
 1. **`pocket_profiler.py`** – reads a protein structure, looks at an active site, and works backwards to a blueprint ("pharmacophore") for a ligand that should bind there and repress the protein.
 2. **`ligand_builder.py`** – turns that blueprint into real molecules with 3D coordinates.
+2b. **`screen_library.py`** – the better alternative to step 2: screens a real
+   compound library (ChEMBL, ~2.9 million published compounds) down to the
+   molecules that best match the pocket. On 3ERT its best hit docks at
+   -9.04 kcal/mol against the real drug's -9.58, where the hand-written kit
+   managed only -7.22. See [screen_library.py](#screen_librarypy---screening-a-real-compound-library-instead).
 3. **`dock_ligands.py`** – places each molecule in the pocket with AutoDock Vina and scores the fit.
 4. **`make_report.py`** – turns all of that into **one readable HTML page** (plus a CSV) that you can double-click, print, or email to someone who has none of this installed.
 5. **`plasmid_builder.py`** – takes protein sequences in a FASTA file and designs codon-optimised, His-tagged E. coli genes ready for NdeI/XhoI cloning.
@@ -155,6 +160,142 @@ The honest next step is docking, which is now implemented in
 physically fits.
 
 ---
+
+## screen_library.py - screening a real compound library instead
+
+`ligand_builder.py` assembles molecules from a small hand-written kit. That is
+fine for seeing the pipeline work, but the molecules are fragments, and they
+dock measurably worse than a real drug. `screen_library.py` is the alternative:
+it screens a **real, published compound collection** and keeps the molecules
+that best match the pocket.
+
+Both paths write the same `<CODE>_ligands.sdf`, so `dock_ligands.py` and
+`make_report.py` do not care which one you used. The scoring code they share
+lives in `pharmacophore_score.py`, so the two paths cannot drift apart.
+
+### Which library, and what is actually in it
+
+**ChEMBL 37**, downloaded straight from the EBI:
+
+```
+https://ftp.ebi.ac.uk/pub/databases/chembl/ChEMBLdb/latest/chembl_37_chemreps.txt.gz
+```
+
+That file is a plain tab-separated list of ChEMBL ID + SMILES for every
+compound in the release: **~2.9 million molecules, 293 MB compressed**. No
+account, no API key, no registration.
+
+What those molecules are: compounds that have been **synthesised and assayed in
+published medicinal-chemistry work**. What they are **not**:
+
+* not a list of things that bind *your* protein - they were measured against
+  thousands of different targets, or in assays unrelated to anything you care
+  about;
+* not guaranteed to be **purchasable** - ChEMBL is a literature database, not a
+  vendor catalogue. Some of these you could buy tomorrow; some were made once
+  by one group in 1998;
+* not a list of drugs - most are research compounds.
+
+Why ChEMBL and not ZINC or Enamine: ZINC's `files.docking.org` tranche server
+was unreachable when this was built (no response at all), and Enamine's
+screening sets want a registration step. ChEMBL is a single unauthenticated
+URL that works, which is the only kind of download that can be trusted inside
+somebody else's Colab session.
+
+**A bundled offline fallback** ships in the repo:
+`data/chembl_fallback_subset.smi`, 8,000 random drug-like molecules from the
+same ChEMBL 37 release (~0.5 MB). Use `--library fallback` if the download
+fails or you are offline. ChEMBL data is CC BY-SA 3.0.
+
+### Running it
+
+```powershell
+python screen_library.py output\3ERT_pharmacophore.json
+python dock_ligands.py output\3ERT_pharmacophore.json --ligands output\3ERT_ligands.sdf --receptor 3ERT --control-smiles "CC/C(=C(\c1ccc(O)cc1)c1ccc(OCCN(C)C)cc1)c1ccccc1" --control-name 4-hydroxytamoxifen
+python make_report.py output\3ERT_pharmacophore.json
+```
+
+### How the filtering works, stage by stage
+
+Each stage is cheaper per molecule than the one after it, which is the only way
+to get through a library this size:
+
+1. **Text prefilter** - SMILES string length and banned elements (metals,
+   boron, silicon...). No chemistry at all, just string tests, so it runs at
+   library speed.
+2. **RDKit parse** - survivors become real molecules; salts are reduced to
+   their largest fragment.
+3. **Property windows** - molecular weight, cLogP, H-bond donors, H-bond
+   acceptors and rotatable bonds, taken from the pocket profile itself. If too
+   few molecules fit, the windows are widened once (x1.6) and the scan repeats;
+   the report says so when that happens.
+4. **Structural alerts** - PAINS and Brenk catalogues via RDKit's
+   `FilterCatalog`, which flag notorious assay-interfering and unstable groups.
+   Turn off with `--no-pains`.
+5. **Checklist score** - the identical 0-100 pharmacophore match that
+   `ligand_builder.py` uses.
+6. **Scaffold cap** - at most 2 molecules per Murcko scaffold, so the top of
+   the list is not ten near-twins.
+7. **3D conformers** for the final shortlist only.
+
+The run prints the count at every stage, plus a progress line every 25,000
+molecules so you can see it is alive.
+
+### Options
+
+| Flag | Default | What it does |
+|---|---|---|
+| `--library` | `chembl` | `chembl`, `fallback` (bundled subset) or `file` |
+| `--library-file` | - | your own SMILES file, with `--library file` |
+| `--max-scan` | `250000` | library rows to look at; `0` = all ~2.9 million |
+| `--shortlist` | `500` | how many survive the prefilter |
+| `--molecules` | `15` | how many get 3D structures and go to docking |
+| `--confs` | `5` | conformers per molecule |
+| `--window-slack` | `1.0` | widen the pocket's property windows (1.5 = 50% wider) |
+| `--no-pains` | off | keep PAINS/Brenk hits |
+| `--max-per-scaffold` | `2` | diversity cap |
+| `--cache` | auto | reuse a downloaded chemreps `.gz` |
+
+### Does it actually help? The 3ERT test
+
+Same pocket, same docking settings, same control. The control is
+4-hydroxytamoxifen, the drug that really sits in 3ERT, docked back into its own
+pocket:
+
+| Molecule source | Best Vina score | Gap to the real drug |
+|---|---|---|
+| hand-written starter fragments | **-7.22 kcal/mol** | 2.36 kcal/mol behind |
+| ChEMBL screen (250,000 rows scanned) | **-9.04 kcal/mol** | **0.54 kcal/mol behind** |
+| 4-hydroxytamoxifen (control) | -9.58 kcal/mol | - |
+
+Stage counts for that run: 250,000 rows read -> 240,292 passed the text filter
+-> 240,290 parsed -> 32,676 inside the pocket's property windows -> 15,218
+dropped by PAINS/Brenk -> 17,458 scored -> 500 shortlisted -> 10 docked.
+Screening took 3.0 minutes, docking 0.7 minutes.
+
+So the real library closes most of the gap to an actual approved drug. That is
+the point of it.
+
+### Honest limits - please read this bit
+
+* **This is not "every molecule that works".** Chemical space cannot be
+  enumerated. This screens a finite catalogue of compounds people have already
+  made. That is the realistic version of "everything".
+* **A capped scan is not a random sample.** `--max-scan 250000` reads the
+  *first* 250,000 rows of the file. ChEMBL rows are roughly in the order
+  compounds entered the database, so you are seeing a historical slice. Use
+  `--max-scan 0` to screen the whole collection - it takes about 35 minutes of
+  CPU rather than 3.
+* **Stages 1-6 are a crude prefilter.** No protein, no shape, no energy. A
+  molecule with perfect chemistry can be physically unable to enter the pocket.
+  Only docking tests that, and docking is itself a weak predictor.
+* **A better docking score is not a binder.** -9.04 vs -9.58 does not mean
+  "almost as good as tamoxifen". Vina's error bar is around 1-2 kcal/mol, so
+  most of that table is within noise of itself.
+* **Nothing checks whether you can buy it.** You still have to look each hit up
+  in a vendor catalogue, and many will not be available.
+* **Nothing checks patents, toxicity or selectivity.** A ChEMBL hit may be a
+  known toxin or somebody's patented lead.
 
 ## dock_ligands.py - does the molecule actually fit the pocket?
 
