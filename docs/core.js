@@ -555,10 +555,204 @@
     };
   }
 
+  /* -------------------------------------------------------------------
+   * SECTION 8: Finding a likely pocket automatically.
+   * Same idea as the notebook's residue finder: take the biggest
+   * non-water, non-buffer hetero group in the file (usually the bound
+   * drug or substrate) and report the amino acids around it.
+   * ----------------------------------------------------------------- */
+
+  // Things that are in crystal structures but are not the interesting
+  // ligand: solvent, cryoprotectants, buffers, ions, sugars.
+  const IGNORED_HET = new Set([
+    "HOH", "WAT", "DOD", "GOL", "EDO", "PEG", "PG4", "PGE", "1PE", "2PE", "MPD",
+    "SO4", "PO4", "ACT", "ACY", "FMT", "CIT", "TRS", "MES", "EPE", "IMD", "DMS",
+    "BME", "NO3", "CL", "NA", "K", "MG", "CA", "ZN", "MN", "FE", "CU", "NI",
+    "CD", "HG", "IOD", "BR", "F", "CO", "CS", "SR", "BA", "UNX", "UNL",
+  ]);
+
+  // The biggest hetero residue worth caring about, or null.
+  function findBoundLigand(residues) {
+    let best = null;
+    residues.forEach(function (r) {
+      if (r.letter) return;                              // standard amino acid
+      const name = (r.resname || "").toUpperCase();
+      if (IGNORED_HET.has(name)) return;
+      if (r.atoms.length < 6) return;                    // ions and fragments
+      if (!best || r.atoms.length > best.atoms.length) best = r;
+    });
+    return best;
+  }
+
+  // Amino acids with any atom within `radius` of the ligand, nearest first.
+  function residuesNearLigand(residues, ligand, radius) {
+    radius = radius || 5.0;
+    const r2 = radius * radius;
+    const near = [];
+    residues.forEach(function (res) {
+      if (!res.letter) return;
+      let bestD2 = Infinity;
+      for (let i = 0; i < res.atoms.length; i++) {
+        const a = res.atoms[i].xyz;
+        for (let j = 0; j < ligand.atoms.length; j++) {
+          const b = ligand.atoms[j].xyz;
+          const dx = a[0] - b[0], dy = a[1] - b[1], dz = a[2] - b[2];
+          const d2 = dx * dx + dy * dy + dz * dz;
+          if (d2 < bestD2) bestD2 = d2;
+        }
+      }
+      if (bestD2 <= r2) near.push({ residue: res, dist: round2(Math.sqrt(bestD2)) });
+    });
+    near.sort(function (a, b) { return a.dist - b.dist; });
+    return near;
+  }
+
+  // One call for the UI: {ligand, near, keys} or null if nothing is bound.
+  function findLikelyPocket(residues, radius, maxResidues) {
+    const ligand = findBoundLigand(residues);
+    if (!ligand) return null;
+    const near = residuesNearLigand(residues, ligand, radius || 5.0);
+    if (near.length === 0) return null;
+    const chosen = near.slice(0, maxResidues || 8);
+    return {
+      ligand: {
+        resname: ligand.resname, chain: ligand.chain, seq: ligand.seq,
+        n_atoms: ligand.atoms.length, key: residueKey(ligand),
+      },
+      radius: radius || 5.0,
+      near: near,
+      keys: chosen.map(function (h) { return residueKey(h.residue); }),
+      labels: chosen.map(function (h) { return h.residue.letter + residueKey(h.residue); }),
+      // Same residues, written for someone who has never read a PDB file.
+      friendly: chosen.map(function (h) {
+        return h.residue.resname + " " + h.residue.seq + " (" + residueKey(h.residue) + ")";
+      }),
+    };
+  }
+
+  /* -------------------------------------------------------------------
+   * SECTION 9: Saying all of this in plain English (Simple mode).
+   * No new science - it only re-words what analyse() already produced.
+   * ----------------------------------------------------------------- */
+
+  // What each pharmacophore feature type means, for someone who has never
+  // taken a chemistry class.
+  const PLAIN_FEATURE = {
+    anionic: "a negatively charged part (the kind of group vinegar has)",
+    cationic: "a positively charged part (the kind of group ammonia has)",
+    anionic_or_aromatic: "either a negatively charged part or a flat ring",
+    aromatic: "a flat ring of carbon atoms, like the ring in benzene",
+    aromatic_and_hbond: "a flat ring that also has an oxygen or nitrogen on it",
+    hydrophobic: "a greasy, oily part made of plain carbon",
+    hbond_acceptor: "an oxygen or nitrogen that can grab onto a hydrogen",
+    hbond_mixed: "oxygens and nitrogens that can both give and take hydrogens",
+    hbond_acceptor_or_covalent: "an oxygen or nitrogen that can grab onto a hydrogen",
+    shape: "a little extra bulk - there is spare room here",
+  };
+
+  // Everyday molecules to compare a weight against.
+  const SIZE_REFS = [
+    [46, "a molecule of alcohol"], [151, "a paracetamol tablet's active ingredient"],
+    [180, "an aspirin molecule"], [194, "a caffeine molecule"],
+    [206, "an ibuprofen molecule"], [300, "a typical small drug"],
+    [388, "a tamoxifen molecule"], [480, "a large drug molecule"],
+    [734, "a very large drug molecule"],
+  ];
+
+  function sizeComparison(mw) {
+    let best = SIZE_REFS[0];
+    for (let i = 0; i < SIZE_REFS.length; i++) {
+      if (Math.abs(SIZE_REFS[i][0] - mw) < Math.abs(best[0] - mw)) best = SIZE_REFS[i];
+    }
+    return best[1];
+  }
+
+  // Turn an analyse() result into a handful of plain sentences.
+  function plainSummary(name, result) {
+    const p = result.profile, g = result.geometry, props = result.properties;
+    const sentences = [];
+
+    // 1. How big the pocket is and what it is made of.
+    const greasy = Math.round(100 * p.hydrophobic.fraction);
+    const rings = Math.round(100 * p.aromatic.fraction);
+    const charged = Math.round(100 * (p.positive.fraction + p.negative.fraction));
+    sentences.push(
+      "The pocket you picked in " + name + " is lined by " + p.n_residues +
+      " building blocks of the protein, and the wall of it measures about " +
+      Math.round(g.max_atom_span_A) + " angstroms end to end (an angstrom is a ten-millionth of a " +
+      "millimetre). The molecule that binds only has to fill the dent in the middle, so it is much " +
+      "smaller than that.");
+
+    let character;
+    if (p.mean_kd_hydropathy > 0.5) character = "greasy and water-hating";
+    else if (p.mean_kd_hydropathy > -0.5) character = "a mix of greasy and water-friendly";
+    else character = "water-friendly rather than greasy";
+    sentences.push(
+      "Overall it is " + character + ". " + greasy + " out of every 100 of those building blocks are " +
+      "oily ones, " + rings + " have flat rings, and " + charged + " carry an electrical charge.");
+
+    // 2. The charge of the pocket, and so of the molecule that fits it.
+    const net = p.net_formal_charge_pH7;
+    if (net > 0) {
+      sentences.push("The pocket is positively charged overall (" + (net > 0 ? "+" : "") + net +
+        "), so a molecule that fits well should carry some negative charge - opposite charges pull together.");
+    } else if (net < 0) {
+      sentences.push("The pocket is negatively charged overall (" + net +
+        "), so a molecule that fits well should carry some positive charge - opposite charges pull together.");
+    } else {
+      sentences.push("The pocket has no overall electrical charge, so the molecule that fits it " +
+        "does not need one either.");
+    }
+
+    // 3. What chemistry the molecule should carry: top feature types by
+    //    total priority, worded plainly.
+    const weight = new Map();
+    result.features.forEach(function (f) {
+      weight.set(f.ligand_feature_type,
+        (weight.get(f.ligand_feature_type) || 0) + f.priority_score);
+    });
+    const ranked = Array.from(weight.entries()).sort(function (a, b) { return b[1] - a[1]; });
+    const wants = ranked.slice(0, 3).map(function (kv) {
+      return PLAIN_FEATURE[kv[0]] || kv[0].replace(/_/g, " ");
+    });
+    let wantsText;
+    if (wants.length === 1) wantsText = wants[0];
+    else if (wants.length === 2) wantsText = wants[0] + ", and " + wants[1];
+    else wantsText = wants[0] + ", " + wants[1] + ", and " + wants[2];
+    sentences.push("So the molecule you are looking for should have " + wantsText + ".");
+
+    // 4. Size window, in everyday terms.
+    const mwLow = props.molecular_weight_Da[0], mwHigh = props.molecular_weight_Da[1];
+    const mid = Math.round((mwLow + mwHigh) / 2);
+    sentences.push("It should weigh somewhere between " + mwLow + " and " + mwHigh +
+      " daltons - about the size of " + sizeComparison(mid) + ". Smaller than that rattles around " +
+      "in the pocket; bigger than that will not fit in.");
+
+    // The honesty line, in beginner words.
+    const caveat =
+      "Important: this is a shopping list, not a prediction. It says what kind of molecule the " +
+      "pocket is shaped and charged for - nothing here has been tested, in a computer or in a lab, " +
+      "and most molecules that look right on paper do not actually work. Treat it as a short list " +
+      "worth trying at the bench, never as proof that something binds.";
+
+    // The headline tags for the little bar chart.
+    const bars = [
+      { label: "Greasy", pct: greasy, hint: "oily, water-hating building blocks" },
+      { label: "Flat rings", pct: rings, hint: "ring-shaped building blocks a molecule can stack against" },
+      { label: "Positive", pct: Math.round(100 * p.positive.fraction), hint: "positively charged building blocks" },
+      { label: "Negative", pct: Math.round(100 * p.negative.fraction), hint: "negatively charged building blocks" },
+      { label: "Water-friendly", pct: Math.round(100 * p.polar_neutral.fraction), hint: "polar but uncharged building blocks" },
+    ];
+
+    return { sentences: sentences, caveat: caveat, bars: bars, wants: wants };
+  }
+
   return {
     parseStructure: parseStructure, parsePDB: parsePDB, parseMMCIF: parseMMCIF,
     chainsPresent: chainsPresent, parseResidueSpec: parseResidueSpec,
     analyse: analyse, renderReport: renderReport, toJSON: toJSON,
     residueKey: residueKey, THREE_TO_ONE: THREE_TO_ONE, DISCLAIMER: DISCLAIMER,
+    findBoundLigand: findBoundLigand, residuesNearLigand: residuesNearLigand,
+    findLikelyPocket: findLikelyPocket, plainSummary: plainSummary,
   };
 });

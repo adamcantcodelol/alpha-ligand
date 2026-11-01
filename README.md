@@ -8,7 +8,7 @@
 | --- | --- |
 | [**One-click notebook (recommended)**](https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_OneClick.ipynb) — fill one form, press one play button, get a results page | **Nothing.** It runs on a free Google computer and installs its own software there. |
 | [Step-by-step notebook](https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb) — the same pipeline in separate cells, plus the optional peptide branch | **Nothing**, same as above. |
-| [The web page](https://adamcantcodelol.github.io/alpha-ligand/) — pocket profiling only, instantly | **Nothing.** It runs in your own browser. |
+| [The web page](https://adamcantcodelol.github.io/alpha-ligand/) — pocket profiling only, instantly, with a beginner-friendly **Simple mode** | **Nothing.** It runs in your own browser. |
 | [On your own computer](#running-it-on-your-own-computer-not-needed-for-colab) — for developers, or offline work | Python, RDKit, Biopython, meeko and AutoDock Vina, installed by you. |
 
 > ### Using Colab? Ignore every install instruction in this README.
@@ -618,6 +618,49 @@ residues from the crystal; Step 2c echoes back what is about to be analysed.
 
 The web app in `docs/` does step 1 alone, instantly, with no notebook at all:
 <https://adamcantcodelol.github.io/alpha-ligand/>
+
+---
+
+## The web page - Simple mode and Advanced mode
+
+<https://adamcantcodelol.github.io/alpha-ligand/> — vanilla HTML/CSS/JS in
+`docs/`, no build step, no dependencies, nothing uploaded anywhere. It has two
+views, and the toggle at the top switches between them at any time without
+losing the structure, the pocket or the result. Your choice is remembered in
+`localStorage`; a first-time visitor gets **Simple**.
+
+### Simple mode (the default)
+
+Three screens, one at a time, written for someone who has never opened a PDB
+file.
+
+1. **Pick a protein.** Explains in two sentences what a pocket and a PDB code
+   are. A **Try the example (3ERT)** button fills everything in and runs the
+   whole thing, so you can see the answer before understanding the inputs.
+   Typing a code, or uploading your own `.pdb`/`.cif`, also works.
+2. **Choose the pocket.** It looks for the largest non-water, non-buffer
+   HETATM group in the file — usually the bound drug — and offers the amino
+   acids within 5 Å of it: *"This structure has a molecule called OHT already
+   sitting in it… We can use those as your pocket."* One button accepts it.
+   Typing residues by hand is the fallback, not the default. This is the same
+   idea as the notebook's residue finder, reimplemented in JavaScript
+   (`Core.findLikelyPocket`).
+3. **Read the answer.** Five plain sentences plus a small bar chart of what the
+   pocket wall is made of, then a blunt note that this is a shopping list and
+   not a prediction. **"Show me the details"** expands to the real numbers and
+   the `.txt` / `.json` downloads — nothing is deleted, only folded away. The
+   screen ends with a card pointing at the one-click Colab notebook, prefilled
+   with the PDB code and residues you just used.
+
+### Advanced mode
+
+The original interface, unchanged: the full residue picker, the cutoff slider,
+the composition and geometry grids, the complete ranked pharmacophore table,
+the suggested property windows and both downloads. One addition — a **Suggest
+residues from the bound ligand** button, the same finder Simple mode uses.
+
+The science is byte-identical in both modes: `core.js` produces exactly the
+numbers it did before, and Simple mode only re-words them (`Core.plainSummary`).
 
 ---
 

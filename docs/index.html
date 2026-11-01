@@ -4,18 +4,172 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alpha-Ligand &mdash; pocket profiler &amp; repressor blueprint</title>
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
   <h1>Alpha&#8209;Ligand</h1>
-  <p class="tagline">Give it a protein structure and its active-site residues. It reads the chemistry
+  <p class="tagline" id="tagline">Give it a protein structure and its active-site residues. It reads the chemistry
   of the pocket and works backwards to the blueprint of a ligand that would fill it &mdash; a
   candidate repressor.</p>
+
+  <div class="modebar" role="group" aria-label="Choose how much detail you want">
+    <button id="modeSimple" type="button" class="modebtn" aria-pressed="true">Simple mode</button>
+    <button id="modeAdvanced" type="button" class="modebtn" aria-pressed="false">Advanced mode</button>
+    <span class="modehint" id="modeHint"></span>
+  </div>
 </header>
 
 <main>
+
+<!-- ===================================================================
+     SIMPLE MODE: one step on screen at a time, plain language.
+     =================================================================== -->
+<div id="simpleUI">
+
+  <ol class="progress" id="progress">
+    <li data-step="1"><span class="dot">1</span> Pick a protein</li>
+    <li data-step="2"><span class="dot">2</span> Choose the pocket</li>
+    <li data-step="3"><span class="dot">3</span> Read the answer</li>
+  </ol>
+
+  <!-- ---------------- simple step 1 ---------------- -->
+  <section class="card" id="sxStep1">
+    <h2>Step 1 of 3 &mdash; pick a protein</h2>
+    <p>A protein is a molecule in your cells with a dent in its surface, called a
+    <strong>pocket</strong>. Drugs work by sitting in that dent. This page looks at a pocket and
+    tells you what kind of molecule would fit it.</p>
+    <p>To start, we need a 3D picture of your protein. Every solved protein structure in the world
+    has a free four-character ID called a <strong>PDB code</strong> &mdash; for example
+    <code>3ERT</code> is a breast-cancer protein with the drug tamoxifen stuck in it.</p>
+
+    <p class="bigexample">
+      <button id="sxExample" type="button" class="primary big">Try the example (3ERT) &rarr;</button>
+      <span class="hint inline">Never done this before? Press that. It fills everything in and runs
+      it for you, so you can see what the answer looks like.</span>
+    </p>
+
+    <div class="rule"><span>or use your own protein</span></div>
+
+    <div class="row">
+      <label for="sxCode">PDB code</label>
+      <input id="sxCode" type="text" maxlength="4" placeholder="3ERT" autocomplete="off">
+      <button id="sxFetch" type="button" class="primary">Look it up</button>
+    </div>
+    <p class="hint">Don't know the code? Search your protein's name at
+    <a href="https://www.rcsb.org/" target="_blank" rel="noopener">rcsb.org</a> and copy the code
+    from the result.</p>
+
+    <div class="row">
+      <label for="sxFile">Or your own file</label>
+      <input id="sxFile" type="file" accept=".pdb,.ent,.cif,.mmcif,.txt">
+    </div>
+    <p class="hint">A <code>.pdb</code> or <code>.cif</code> file from your lab works too. It is read
+    inside your own browser and never uploaded anywhere.</p>
+
+    <div id="sxLoadStatus" class="status"></div>
+  </section>
+
+  <!-- ---------------- simple step 2 ---------------- -->
+  <section class="card" id="sxStep2" hidden>
+    <h2>Step 2 of 3 &mdash; choose the pocket</h2>
+    <p id="sxLoadedLine" class="loaded"></p>
+    <p>A protein is big, and only a small patch of it does the real work. That patch is the
+    <strong>active site</strong> &mdash; the dent where another molecule binds. We need to know
+    which part of the protein you care about.</p>
+
+    <div id="sxAutoBox" class="suggestion" hidden>
+      <h3 class="plain">We found a likely pocket</h3>
+      <p id="sxAutoText"></p>
+      <p>
+        <button id="sxUseAuto" type="button" class="primary big">Yes, use this pocket &rarr;</button>
+        <button id="sxManualLink" type="button" class="linkish">I'd rather type my own residues</button>
+      </p>
+    </div>
+
+    <div id="sxNoAutoBox" class="suggestion warnish" hidden>
+      <h3 class="plain">No obvious pocket in this file</h3>
+      <p>This structure has nothing bound in it, so we can't guess where the active site is. If a
+      paper about your protein lists the important residues, type them below. Otherwise, try a
+      structure of the same protein that has a drug or molecule bound to it.</p>
+    </div>
+
+    <div id="sxManualBox" hidden>
+      <h3 class="plain">Type the residues yourself</h3>
+      <p class="hint">A residue is one building block of the protein. Write each one as
+      <code>chain:number</code>, like <code>A:351</code>, separated by commas. Or just click them in
+      the list.</p>
+      <div class="row">
+        <label for="sxResidues">Residues</label>
+        <input id="sxResidues" type="text" placeholder="A:351,A:383,A:524" autocomplete="off">
+      </div>
+      <div class="picker">
+        <div class="row">
+          <label for="sxChain">Chain</label>
+          <select id="sxChain"></select>
+          <input id="sxFilter" type="search" placeholder="filter, e.g. 351 or HIS">
+        </div>
+        <div id="sxResList" class="reslist"></div>
+      </div>
+    </div>
+
+    <p id="sxRunRow" hidden>
+      <button id="sxRun" type="button" class="primary big">See what this pocket wants &rarr;</button>
+    </p>
+    <p><button id="sxBack1" type="button" class="linkish">&larr; Back</button></p>
+    <div id="sxRunStatus" class="status"></div>
+  </section>
+
+  <!-- ---------------- simple step 3 ---------------- -->
+  <section id="sxStep3" hidden>
+    <div class="card">
+      <h2>Step 3 of 3 &mdash; what we found</h2>
+      <div id="sxSentences" class="sentences"></div>
+      <div id="sxBars" class="bars"></div>
+      <p class="caveat" id="sxCaveat"></p>
+
+      <details id="sxDetails">
+        <summary>Show me the details (the actual numbers)</summary>
+        <div id="sxDetailBody" class="detailbody"></div>
+        <p class="hint">Same numbers as Advanced mode. Want the full tables and coordinates?
+          <button id="sxToAdvanced" type="button" class="linkish">Switch to Advanced mode</button>
+          &mdash; your protein and pocket stay loaded.</p>
+        <p>
+          <button id="sxDlTxt" type="button">Download report (.txt)</button>
+          <button id="sxDlJson" type="button">Download pharmacophore (.json)</button>
+        </p>
+      </details>
+    </div>
+
+    <div class="card colab">
+      <h2>What to do next</h2>
+      <p>This page told you <strong>what kind of molecule</strong> the pocket wants. The next step is
+      to go find real molecules that match and see how well they fit &mdash; that's done in a free
+      Google notebook that runs on Google's computers, so there is
+      <strong>nothing to install</strong> and nothing to set up.</p>
+      <p>You open the link, type the same PDB code and residues into a form, and press one play
+      button. It searches millions of real published compounds, fits the best ones into your pocket
+      and gives you a readable results page with pictures.</p>
+      <p><a class="colab-link" href="https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_OneClick.ipynb" target="_blank" rel="noopener">Open the one-click notebook &rarr;</a></p>
+      <p class="hint" id="sxCarryOver"></p>
+    </div>
+
+    <div class="card">
+      <p>
+        <button id="sxRestart" type="button" class="primary">Start again with another protein</button>
+        <button id="sxBack2" type="button" class="linkish">&larr; Back to the pocket</button>
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===================================================================
+     ADVANCED MODE: the original interface, unchanged.
+     =================================================================== -->
+<div id="advancedUI" hidden>
 
   <!-- ---------------- STEP 1: the structure ---------------- -->
   <section class="card">
@@ -49,6 +203,9 @@
     </div>
     <p class="hint">Write them as <code>chain:number</code>, separated by commas. Or just click them
     in the list below.</p>
+
+    <p><button id="autoBtn" type="button">Suggest residues from the bound ligand</button></p>
+    <div id="autoStatus" class="status"></div>
 
     <div class="picker">
       <div class="row">
@@ -141,6 +298,8 @@
     </div>
 
   </section>
+
+</div>
 
 </main>
 
