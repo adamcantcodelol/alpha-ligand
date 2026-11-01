@@ -1,0 +1,198 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>3ERT - peptide binder candidates</title>
+<style>
+:root{
+  --bg:#0f1115; --card:#171a21; --line:#272c37; --ink:#e7eaf0; --dim:#9aa3b2;
+  --accent:#5fd3a6; --accent2:#7aa7ff; --warn:#f0b254; --bad:#ef6a6a;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+header{padding:40px 24px 4px;max-width:1000px;margin:0 auto}
+h1{margin:0 0 6px;font-size:32px;letter-spacing:-.02em}
+.tagline{margin:0;color:var(--dim);max-width:70ch}
+main{max-width:1000px;margin:0 auto;padding:20px 24px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:20px 22px;margin:0 0 18px}
+h2{margin:0 0 12px;font-size:19px}
+h3{margin:18px 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
+p{max-width:78ch}
+code,.smiles{background:#0f1218;border:1px solid var(--line);border-radius:5px;
+  padding:2px 6px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12.5px;
+  word-break:break-all}
+.meta{display:flex;flex-wrap:wrap;gap:10px 28px;margin:10px 0 0;color:var(--dim);font-size:13.5px}
+.meta b{color:var(--ink);font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.hit{display:grid;grid-template-columns:320px 1fr;gap:18px;border:1px solid var(--line);
+  border-radius:11px;padding:16px;margin:0 0 14px;background:#141720;break-inside:avoid}
+.pic{background:#fff;border-radius:9px;padding:6px;display:flex;align-items:center;justify-content:center}
+img.mol{max-width:100%;height:auto;display:block}
+.molsvg{background:#fff;border-radius:9px}
+.nopic{color:#888;font-size:13px;padding:40px 0;text-align:center}
+.hitname{font-size:16px;font-weight:650;margin:0 0 2px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.badge{font-size:11.5px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--dim)}
+.badge.rank{background:var(--accent);color:#0f1115;border-color:var(--accent);font-weight:700}
+.badge.tie{background:#3a2f16;border-color:var(--warn);color:var(--warn)}
+.badge.ctrl{background:#1b2a3f;border-color:var(--accent2);color:var(--accent2)}
+.scorerow{display:flex;flex-wrap:wrap;gap:22px;margin:10px 0 4px}
+.score .v{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.score .k{display:block;font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.good{color:var(--accent)} .mid{color:var(--warn)}
+.props{display:flex;flex-wrap:wrap;gap:6px 10px;margin:10px 0;font-size:12.5px;color:var(--dim)}
+.props span b{color:var(--ink)}
+.note{color:var(--dim);font-size:13.5px}
+.callout{border-left:3px solid var(--accent2);background:#141b26;padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0}
+.callout.warn{border-left-color:var(--warn);background:#1e1a12}
+.callout.bad{border-left-color:var(--bad);background:#1f1414}
+ul{max-width:78ch} li{margin:5px 0}
+footer{max-width:1000px;margin:0 auto;padding:0 24px 50px;color:var(--dim);font-size:12.5px}
+@media print{
+  :root{--bg:#fff;--card:#fff;--line:#c8ccd4;--ink:#111;--dim:#555;
+        --accent:#0a7a55;--accent2:#1a4ea8;--warn:#8a5a00;--bad:#9a2020}
+  body{background:#fff;color:#111;font-size:11pt}
+  .card,.hit{background:#fff;border:1px solid #c8ccd4;box-shadow:none}
+  .hit{break-inside:avoid;page-break-inside:avoid}
+  .badge.rank{background:#eee;color:#111;border-color:#999}
+  .callout{background:#f6f7f9}
+  header{padding-top:10px}
+}
+
+.seqbox{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:15px;
+  letter-spacing:.06em;background:#0f1218;border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;word-break:break-all;margin:8px 0;user-select:all}
+.linker{color:var(--dim)}
+.pep{border:1px solid var(--line);border-radius:11px;padding:16px;margin:0 0 14px;
+  background:#141720;break-inside:avoid}
+.ok{color:var(--accent)} .no{color:var(--bad)}
+</style></head><body>
+<header><h1>Peptide binder candidates &mdash; 3ERT</h1>
+<p class='tagline'>Short peptide sequences whose residue chemistry complements this pocket. Designed from the pocket profile only: nothing here has been folded, docked or measured.</p>
+<div class='meta'><span>Design length <b>11 aa</b></span><span>Candidates <b>8</b></span><span>Source <b>3ERT_pharmacophore.json</b></span></div></header><main>
+<div class='card'><h2>Read this first</h2>
+<div class='callout warn'><p><b>This is a composition-based design, not a structure-based one.</b> The pocket profile said which chemistry a binder should present; these sequences present it, in roughly the right proportions, at a sensible length. The method never folded a peptide, never placed a residue in the pocket, and produced no affinity estimate. There is no Kd here because none was calculated.</p></div>
+<p>Real structure-based mini-protein binder design uses RFdiffusion, ProteinMPNN, Rosetta and AlphaFold2/AF-Multimer, which build an actual 3D interface and score it. Treat this list as a cheap first panel to express and screen, and expect most of it to do nothing &mdash; that is the normal outcome for a composition-only method, not a failure of your bench work.</p>
+<h3>Small molecule or peptide?</h3>
+<ul><li><b>Small molecule</b> (the other branch of this project): you search a vendor catalogue and buy it. Fast, but you can only buy what exists.</li><li><b>Peptide</b> (this page): you express it in <i>E. coli</i> from the plasmid insert <code>plasmid_builder.py</code> designs, or order it synthesised. Slower, but any sequence is makeable.</li></ul></div>
+<div class='card'><h2>What the pocket asked for</h2>
+<p class='note'>pocket span 29.3 A -&gt; ~6 residues of binding face; 10 distinct feature types -&gt; ~16 residues; averaged and clamped to 8-20</p>
+<table><tr><th>Pocket feature</th><th class='num'>Weight</th><th class='num'>Share</th><th>In plain English</th></tr>
+<tr><td><code>cationic</code></td><td class='num'>65.0</td><td class='num'>32.2%</td><td class='note'>the pocket is negatively charged here, so the peptide brings Lys or Arg</td></tr>
+<tr><td><code>hydrophobic</code></td><td class='num'>60.0</td><td class='num'>29.7%</td><td class='note'>a greasy wall, answered with greasy residues</td></tr>
+<tr><td><code>anionic</code></td><td class='num'>20.0</td><td class='num'>9.9%</td><td class='note'>the pocket is positively charged here, so the peptide brings Asp or Glu</td></tr>
+<tr><td><code>aromatic</code></td><td class='num'>13.5</td><td class='num'>6.7%</td><td class='note'>a flat ring in the pocket wall to stack a Phe/Trp/Tyr against</td></tr>
+<tr><td><code>anionic_or_aromatic</code></td><td class='num'>10.5</td><td class='num'>5.2%</td><td class='note'>a histidine wall: answer with a negative charge or a ring</td></tr>
+<tr><td><code>hbond_acceptor</code></td><td class='num'>10.0</td><td class='num'>5.0%</td><td class='note'>the pocket donates a hydrogen bond, so the peptide accepts one</td></tr>
+<tr><td><code>aromatic_and_hbond</code></td><td class='num'>9.0</td><td class='num'>4.5%</td><td class='note'>a tyrosine wall: wants a ring plus a hydrogen bond</td></tr>
+<tr><td><code>hbond_mixed</code></td><td class='num'>6.0</td><td class='num'>3.0%</td><td class='note'>an amide wall that both donates and accepts hydrogen bonds</td></tr>
+<tr><td><code>hbond_acceptor_or_covalent</code></td><td class='num'>4.0</td><td class='num'>2.0%</td><td class='note'>a cysteine wall; answered with a plain hydrogen-bond acceptor</td></tr>
+<tr><td><code>shape</code></td><td class='num'>4.0</td><td class='num'>2.0%</td><td class='note'>a glycine in the wall leaves space here</td></tr>
+</table>
+<h3>Amino acids the pocket wants most</h3><p>
+<b>R</b> (~1.2 copies), <b>K</b> (~1.1 copies), <b>F</b> (~1.0 copies), <b>L</b> (~1.0 copies), <b>I</b> (~1.0 copies), <b>V</b> (~0.9 copies), <b>M</b> (~0.7 copies), <b>D</b> (~0.6 copies), <b>E</b> (~0.6 copies), <b>Y</b> (~0.6 copies)
+</p>
+</div>
+<div class='card'><h2>Candidates</h2>
+<p class='note'>Ranked by <b>coverage</b>: the percentage of the pocket's weighted amino-acid demand this composition satisfies. Coverage is a checklist score, <b>not</b> a predicted affinity, and candidates within a few points of each other should be treated as equivalent.</p>
+<p class='note'>Colours: <span style='color:#ef6a6a'>&#9632;</span> negative (Asp/Glu) &nbsp;<span style='color:#7aa7ff'>&#9632;</span> positive (Lys/Arg/His) &nbsp;<span style='color:#c792ea'>&#9632;</span> aromatic (Phe/Trp/Tyr) &nbsp;<span style='color:#f0b254'>&#9632;</span> greasy (Ala/Val/Leu/Ile/Met/Pro) &nbsp;<span style='color:#5fd3a6'>&#9632;</span> polar (Ser/Thr/Asn/Gln/Cys) &nbsp;<span style='color:#9aa3b2'>&#9632;</span> glycine (flexible)</p>
+<div class='pep'>
+<p class='hitname'>#1 &nbsp;<span class='badge rank'>coverage 78.4%</span> &nbsp;<span class='badge'>3ERT_pep01</span></p>
+<h3>Designed binder sequence (click to select, then copy)</h3>
+<div class='seqbox'><span style="color:#7aa7ff">R</span><span style="color:#f0b254">L</span><span style="color:#f0b254">M</span><span style="color:#c792ea">W</span><span style="color:#ef6a6a">D</span><span style="color:#ef6a6a">E</span><span style="color:#f0b254">I</span><span style="color:#f0b254">V</span><span style="color:#f0b254">A</span><span style="color:#7aa7ff">K</span><span style="color:#c792ea">F</span></div>
+<div class='props'><span>Length <b>11 aa</b></span><span>Net charge pH 7 <b>-0.24</b></span><span>GRAVY <b>+0.24</b></span><span>pI <b>6.07</b></span><span>MW <b>1407.7 Da</b></span><span>Aromatic <b>18%</b></span><span>Greasy <b>64%</b></span><span>Instability index <b>18.9</b></span></div>
+<h3>Sequence sent to the plasmid designer</h3>
+<div class='seqbox'><span style="color:#7aa7ff">R</span><span style="color:#f0b254">L</span><span style="color:#f0b254">M</span><span style="color:#c792ea">W</span><span style="color:#ef6a6a">D</span><span style="color:#ef6a6a">E</span><span style="color:#f0b254">I</span><span style="color:#f0b254">V</span><span style="color:#f0b254">A</span><span style="color:#7aa7ff">K</span><span style="color:#c792ea">F</span><span class="linker">GSGGSGSGG</span></div>
+<p class='note'>The grey tail is an inert <code>GSGGSGSGG</code> linker added only because <code>plasmid_builder.py</code> will not accept a protein shorter than 20 aa. It is flexible spacer and also keeps the designed face away from the His tag. The designed residues are unchanged.</p>
+<p class='note'><span class='ok'>&#10003; Expression construct built</span> &mdash; 99 bp insert in <code>3ERT_pep01.gb</code>; the DNA translates back to <code>MRLMWDEIVAKFGSGGSGSGGLEHHHHHH</code> exactly (start Met + designed peptide + LEHHHHHH His tag).</p>
+</div>
+<div class='pep'>
+<p class='hitname'>#2 &nbsp;<span class='badge rank'>coverage 77.7%</span> &nbsp;<span class='badge'>3ERT_pep02</span></p>
+<h3>Designed binder sequence (click to select, then copy)</h3>
+<div class='seqbox'><span style="color:#c792ea">F</span><span style="color:#5fd3a6">T</span><span style="color:#f0b254">I</span><span style="color:#f0b254">L</span><span style="color:#f0b254">M</span><span style="color:#c792ea">Y</span><span style="color:#f0b254">V</span><span style="color:#ef6a6a">D</span><span style="color:#7aa7ff">R</span><span style="color:#ef6a6a">E</span><span style="color:#7aa7ff">K</span></div>
+<div class='props'><span>Length <b>11 aa</b></span><span>Net charge pH 7 <b>-0.24</b></span><span>GRAVY <b>-0.02</b></span><span>pI <b>6.07</b></span><span>MW <b>1414.7 Da</b></span><span>Aromatic <b>18%</b></span><span>Greasy <b>46%</b></span><span>Instability index <b>27.6</b></span></div>
+<h3>Sequence sent to the plasmid designer</h3>
+<div class='seqbox'><span style="color:#c792ea">F</span><span style="color:#5fd3a6">T</span><span style="color:#f0b254">I</span><span style="color:#f0b254">L</span><span style="color:#f0b254">M</span><span style="color:#c792ea">Y</span><span style="color:#f0b254">V</span><span style="color:#ef6a6a">D</span><span style="color:#7aa7ff">R</span><span style="color:#ef6a6a">E</span><span style="color:#7aa7ff">K</span><span class="linker">GSGGSGSGG</span></div>
+<p class='note'>The grey tail is an inert <code>GSGGSGSGG</code> linker added only because <code>plasmid_builder.py</code> will not accept a protein shorter than 20 aa. It is flexible spacer and also keeps the designed face away from the His tag. The designed residues are unchanged.</p>
+<p class='note'><span class='ok'>&#10003; Expression construct built</span> &mdash; 99 bp insert in <code>3ERT_pep02.gb</code>; the DNA translates back to <code>MFTILMYVDREKGSGGSGSGGLEHHHHHH</code> exactly (start Met + designed peptide + LEHHHHHH His tag).</p>
+</div>
+<div class='pep'>
+<p class='hitname'>#3 &nbsp;<span class='badge rank'>coverage 77.3%</span> &nbsp;<span class='badge'>3ERT_pep03</span></p>
+<h3>Designed binder sequence (click to select, then copy)</h3>
+<div class='seqbox'><span style="color:#7aa7ff">R</span><span style="color:#f0b254">V</span><span style="color:#c792ea">W</span><span style="color:#7aa7ff">K</span><span style="color:#f0b254">I</span><span style="color:#ef6a6a">D</span><span style="color:#f0b254">A</span><span style="color:#f0b254">L</span><span style="color:#c792ea">Y</span><span style="color:#ef6a6a">E</span><span style="color:#c792ea">F</span></div>
+<div class='props'><span>Length <b>11 aa</b></span><span>Net charge pH 7 <b>-0.24</b></span><span>GRAVY <b>-0.04</b></span><span>pI <b>6.07</b></span><span>MW <b>1439.7 Da</b></span><span>Aromatic <b>27%</b></span><span>Greasy <b>55%</b></span><span>Instability index <b>-5.5</b></span></div>
+<h3>Sequence sent to the plasmid designer</h3>
+<div class='seqbox'><span style="color:#7aa7ff">R</span><span style="color:#f0b254">V</span><span style="color:#c792ea">W</span><span style="color:#7aa7ff">K</span><span style="color:#f0b254">I</span><span style="color:#ef6a6a">D</span><span style="color:#f0b254">A</span><span style="color:#f0b254">L</span><span style="color:#c792ea">Y</span><span style="color:#ef6a6a">E</span><span style="color:#c792ea">F</span><span class="linker">GSGGSGSGG</span></div>
+<p class='note'>The grey tail is an inert <code>GSGGSGSGG</code> linker added only because <code>plasmid_builder.py</code> will not accept a protein shorter than 20 aa. It is flexible spacer and also keeps the designed face away from the His tag. The designed residues are unchanged.</p>
+<p class='note'><span class='ok'>&#10003; Expression construct built</span> &mdash; 99 bp insert in <code>3ERT_pep03.gb</code>; the DNA translates back to <code>MRVWKIDALYEFGSGGSGSGGLEHHHHHH</code> exactly (start Met + designed peptide + LEHHHHHH His tag).</p>
+</div>
+<div class='pep'>
+<p class='hitname'>#4 &nbsp;<span class='badge rank'>coverage 76.6%</span> &nbsp;<span class='badge'>3ERT_pep04</span></p>
+<h3>Designed binder sequence (click to select, then copy)</h3>
+<div class='seqbox'><span style="color:#f0b254">L</span><span style="color:#f0b254">V</span><span style="color:#f0b254">I</span><span style="color:#c792ea">Y</span><span style="color:#ef6a6a">E</span><span style="color:#7aa7ff">H</span><span style="color:#7aa7ff">R</span><span style="color:#c792ea">F</span><span style="color:#f0b254">M</span><span style="color:#7aa7ff">K</span><span style="color:#ef6a6a">D</span></div>
+<div class='props'><span>Length <b>11 aa</b></span><span>Net charge pH 7 <b>-0.15</b></span><span>GRAVY <b>-0.24</b></span><span>pI <b>6.76</b></span><span>MW <b>1450.7 Da</b></span><span>Aromatic <b>18%</b></span><span>Greasy <b>46%</b></span><span>Instability index <b>-4.6</b></span></div>
+<h3>Sequence sent to the plasmid designer</h3>
+<div class='seqbox'><span style="color:#f0b254">L</span><span style="color:#f0b254">V</span><span style="color:#f0b254">I</span><span style="color:#c792ea">Y</span><span style="color:#ef6a6a">E</span><span style="color:#7aa7ff">H</span><span style="color:#7aa7ff">R</span><span style="color:#c792ea">F</span><span style="color:#f0b254">M</span><span style="color:#7aa7ff">K</span><span style="color:#ef6a6a">D</span><span class="linker">GSGGSGSGG</span></div>
+<p class='note'>The grey tail is an inert <code>GSGGSGSGG</code> linker added only because <code>plasmid_builder.py</code> will not accept a protein shorter than 20 aa. It is flexible spacer and also keeps the designed face away from the His tag. The designed residues are unchanged.</p>
+<p class='note'><span class='ok'>&#10003; Expression construct built</span> &mdash; 99 bp insert in <code>3ERT_pep04.gb</code>; the DNA translates back to <code>MLVIYEHRFMKDGSGGSGSGGLEHHHHHH</code> exactly (start Met + designed peptide + LEHHHHHH His tag).</p>
+</div>
+<div class='pep'>
+<p class='hitname'>#5 &nbsp;<span class='badge rank'>coverage 76.3%</span> &nbsp;<span class='badge'>3ERT_pep05</span></p>
+<h3>Designed binder sequence (click to select, then copy)</h3>
+<div class='seqbox'><span style="color:#7aa7ff">K</span><span style="color:#f0b254">V</span><span style="color:#c792ea">Y</span><span style="color:#f0b254">M</span><span style="color:#f0b254">L</span><span style="color:#c792ea">F</span><span style="color:#f0b254">I</span><span style="color:#7aa7ff">R</span><span style="color:#ef6a6a">D</span><span style="color:#f0b254">A</span><span style="color:#7aa7ff">R</span></div>
+<div class='props'><span>Length <b>11 aa</b></span><span>Net charge pH 7 <b>+1.76</b></span><span>GRAVY <b>+0.12</b></span><span>pI <b>9.99</b></span><span>MW <b>1411.7 Da</b></span><span>Aromatic <b>18%</b></span><span>Greasy <b>55%</b></span><span>Instability index <b>34.5</b></span></div>
+<h3>Sequence sent to the plasmid designer</h3>
+<div class='seqbox'><span style="color:#7aa7ff">K</span><span style="color:#f0b254">V</span><span style="color:#c792ea">Y</span><span style="color:#f0b254">M</span><span style="color:#f0b254">L</span><span style="color:#c792ea">F</span><span style="color:#f0b254">I</span><span style="color:#7aa7ff">R</span><span style="color:#ef6a6a">D</span><span style="color:#f0b254">A</span><span style="color:#7aa7ff">R</span><span class="linker">GSGGSGSGG</span></div>
+<p class='note'>The grey tail is an inert <code>GSGGSGSGG</code> linker added only because <code>plasmid_builder.py</code> will not accept a protein shorter than 20 aa. It is flexible spacer and also keeps the designed face away from the His tag. The designed residues are unchanged.</p>
+<p class='note'><span class='ok'>&#10003; Expression construct built</span> &mdash; 99 bp insert in <code>3ERT_pep05.gb</code>; the DNA translates back to <code>MKVYMLFIRDARGSGGSGSGGLEHHHHHH</code> exactly (start Met + designed peptide + LEHHHHHH His tag).</p>
+</div>
+<div class='pep'>
+<p class='hitname'>#6 &nbsp;<span class='badge rank'>coverage 76.3%</span> &nbsp;<span class='badge'>3ERT_pep06</span></p>
+<h3>Designed binder sequence (click to select, then copy)</h3>
+<div class='seqbox'><span style="color:#f0b254">I</span><span style="color:#ef6a6a">D</span><span style="color:#c792ea">Y</span><span style="color:#f0b254">A</span><span style="color:#f0b254">L</span><span style="color:#f0b254">V</span><span style="color:#f0b254">M</span><span style="color:#7aa7ff">R</span><span style="color:#c792ea">F</span><span style="color:#7aa7ff">R</span><span style="color:#7aa7ff">K</span></div>
+<div class='props'><span>Length <b>11 aa</b></span><span>Net charge pH 7 <b>+1.76</b></span><span>GRAVY <b>+0.12</b></span><span>pI <b>9.99</b></span><span>MW <b>1411.7 Da</b></span><span>Aromatic <b>18%</b></span><span>Greasy <b>55%</b></span><span>Instability index <b>23.8</b></span></div>
+<h3>Sequence sent to the plasmid designer</h3>
+<div class='seqbox'><span style="color:#f0b254">I</span><span style="color:#ef6a6a">D</span><span style="color:#c792ea">Y</span><span style="color:#f0b254">A</span><span style="color:#f0b254">L</span><span style="color:#f0b254">V</span><span style="color:#f0b254">M</span><span style="color:#7aa7ff">R</span><span style="color:#c792ea">F</span><span style="color:#7aa7ff">R</span><span style="color:#7aa7ff">K</span><span class="linker">GSGGSGSGG</span></div>
+<p class='note'>The grey tail is an inert <code>GSGGSGSGG</code> linker added only because <code>plasmid_builder.py</code> will not accept a protein shorter than 20 aa. It is flexible spacer and also keeps the designed face away from the His tag. The designed residues are unchanged.</p>
+<p class='note'><span class='ok'>&#10003; Expression construct built</span> &mdash; 99 bp insert in <code>3ERT_pep06.gb</code>; the DNA translates back to <code>MIDYALVMRFRKGSGGSGSGGLEHHHHHH</code> exactly (start Met + designed peptide + LEHHHHHH His tag).</p>
+</div>
+<div class='pep'>
+<p class='hitname'>#7 &nbsp;<span class='badge rank'>coverage 76.2%</span> &nbsp;<span class='badge'>3ERT_pep07</span></p>
+<h3>Designed binder sequence (click to select, then copy)</h3>
+<div class='seqbox'><span style="color:#7aa7ff">K</span><span style="color:#c792ea">W</span><span style="color:#c792ea">F</span><span style="color:#f0b254">M</span><span style="color:#5fd3a6">Q</span><span style="color:#7aa7ff">R</span><span style="color:#f0b254">V</span><span style="color:#f0b254">I</span><span style="color:#f0b254">L</span><span style="color:#ef6a6a">E</span><span style="color:#c792ea">Y</span></div>
+<div class='props'><span>Length <b>11 aa</b></span><span>Net charge pH 7 <b>+0.76</b></span><span>GRAVY <b>-0.04</b></span><span>pI <b>8.59</b></span><span>MW <b>1512.8 Da</b></span><span>Aromatic <b>27%</b></span><span>Greasy <b>55%</b></span><span>Instability index <b>19.7</b></span></div>
+<h3>Sequence sent to the plasmid designer</h3>
+<div class='seqbox'><span style="color:#7aa7ff">K</span><span style="color:#c792ea">W</span><span style="color:#c792ea">F</span><span style="color:#f0b254">M</span><span style="color:#5fd3a6">Q</span><span style="color:#7aa7ff">R</span><span style="color:#f0b254">V</span><span style="color:#f0b254">I</span><span style="color:#f0b254">L</span><span style="color:#ef6a6a">E</span><span style="color:#c792ea">Y</span><span class="linker">GSGGSGSGG</span></div>
+<p class='note'>The grey tail is an inert <code>GSGGSGSGG</code> linker added only because <code>plasmid_builder.py</code> will not accept a protein shorter than 20 aa. It is flexible spacer and also keeps the designed face away from the His tag. The designed residues are unchanged.</p>
+<p class='note'><span class='ok'>&#10003; Expression construct built</span> &mdash; 99 bp insert in <code>3ERT_pep07.gb</code>; the DNA translates back to <code>MKWFMQRVILEYGSGGSGSGGLEHHHHHH</code> exactly (start Met + designed peptide + LEHHHHHH His tag).</p>
+</div>
+<div class='pep'>
+<p class='hitname'>#8 &nbsp;<span class='badge rank'>coverage 76.1%</span> &nbsp;<span class='badge'>3ERT_pep08</span></p>
+<h3>Designed binder sequence (click to select, then copy)</h3>
+<div class='seqbox'><span style="color:#c792ea">F</span><span style="color:#ef6a6a">D</span><span style="color:#5fd3a6">S</span><span style="color:#7aa7ff">K</span><span style="color:#5fd3a6">N</span><span style="color:#f0b254">M</span><span style="color:#f0b254">I</span><span style="color:#f0b254">V</span><span style="color:#ef6a6a">E</span><span style="color:#7aa7ff">R</span><span style="color:#f0b254">L</span></div>
+<div class='props'><span>Length <b>11 aa</b></span><span>Net charge pH 7 <b>-0.24</b></span><span>GRAVY <b>-0.23</b></span><span>pI <b>6.07</b></span><span>MW <b>1351.6 Da</b></span><span>Aromatic <b>9%</b></span><span>Greasy <b>46%</b></span><span>Instability index <b>30.1</b></span></div>
+<h3>Sequence sent to the plasmid designer</h3>
+<div class='seqbox'><span style="color:#c792ea">F</span><span style="color:#ef6a6a">D</span><span style="color:#5fd3a6">S</span><span style="color:#7aa7ff">K</span><span style="color:#5fd3a6">N</span><span style="color:#f0b254">M</span><span style="color:#f0b254">I</span><span style="color:#f0b254">V</span><span style="color:#ef6a6a">E</span><span style="color:#7aa7ff">R</span><span style="color:#f0b254">L</span><span class="linker">GSGGSGSGG</span></div>
+<p class='note'>The grey tail is an inert <code>GSGGSGSGG</code> linker added only because <code>plasmid_builder.py</code> will not accept a protein shorter than 20 aa. It is flexible spacer and also keeps the designed face away from the His tag. The designed residues are unchanged.</p>
+<p class='note'><span class='ok'>&#10003; Expression construct built</span> &mdash; 99 bp insert in <code>3ERT_pep08.gb</code>; the DNA translates back to <code>MFDSKNMIVERLGSGGSGSGGLEHHHHHH</code> exactly (start Met + designed peptide + LEHHHHHH His tag).</p>
+</div>
+</div>
+<div class='card'><h2>What to do with this at the bench</h2><ol>
+<li><b>Pick a few, not one.</b> Coverage differences of a point or two mean nothing. Taking the top 3&ndash;5 across different charge/GRAVY values gives you a better panel than taking the single top row.</li>
+<li><b>Decide how to make them.</b> Either order them as synthetic peptides (fast, costs money per peptide, no cloning) or express them from the insert in the <code>.gb</code> files (cheap per peptide once cloned, needs an NdeI/XhoI vector such as a pET backbone, and purification off the His tag).</li>
+<li><b>Screen for binding, do not assume it.</b> A pull-down on the His tag, fluorescence polarisation, BLI/SPR or a simple thermal shift of your target are all reasonable first assays. Include a scrambled version of the same composition as your negative control &mdash; that is the control that tests whether the <i>order</i> of residues matters, which is exactly what this method does not model.</li>
+<li><b>If nothing binds, that is information.</b> It is the expected result often enough that a negative panel should push you toward structure-based design (RFdiffusion/ProteinMPNN) rather than toward more composition sampling.</li>
+</ol></div>
+<div class='card'><h2>Honest limitations</h2><ul>
+<li>No folding, no docking, no 3D structure, no energy calculation.</li>
+<li>No affinity, Kd, IC50 or probability of binding is computed or implied anywhere.</li>
+<li>Residue ORDER is essentially arbitrary: the score only sees composition, so two sequences with the same residues score identically however they are arranged.</li>
+<li>A peptide may not be able to reach a buried pocket at all. Pockets that fit a small molecule are often too enclosed for a peptide backbone.</li>
+<li>Solubility, aggregation, protease sensitivity and cell permeability are not modelled. GRAVY and the instability index are crude proxies only.</li>
+<li>Cys is excluded by default, so disulfide-stapled or cyclic designs are out of scope here.</li>
+<li>The pocket profile itself came from one crystal structure and the residues you named. Wrong residues in, wrong peptides out.</li>
+</ul></div>
+</main><footer>Generated by make_peptide_report.py (alpha-ligand peptide branch) from 3ERT_peptides.json. Self-contained: no internet needed.</footer></body></html>

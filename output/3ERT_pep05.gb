@@ -1,0 +1,28 @@
+LOCUS       3ERT_pep05                99 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  Codon-optimized insert for E. coli expression.
+ACCESSION   3ERT_pep05
+VERSION     3ERT_pep05
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+FEATURES             Location/Qualifiers
+     misc_feature    1..6
+                     /label="NdeI site"
+                     /note="CATATG, ATG = start codon"
+     CDS             4..93
+                     /label="3ERT_pep05-LEHHHHHH"
+                     /translation="MKVYMLFIRDARGSGGSGSGGLEHHHHHH"
+                     /codon_start=1
+                     /transl_table=11
+                     /product="3ERT_pep05 with C-terminal His6 tag"
+     misc_feature    67..90
+                     /label="LEHHHHHH (His6) tag"
+     misc_feature    91..93
+                     /label="TAA stop codon"
+     misc_feature    94..99
+                     /label="XhoI site"
+ORIGIN
+        1 catatgaaag tgtatatgct gtttattcgc gatgcgcgcg gctctggtgg ctctggttct
+       61 ggtggtttag aacatcatca tcatcatcat taactcgag
+//

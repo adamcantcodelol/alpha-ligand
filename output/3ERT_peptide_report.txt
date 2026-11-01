@@ -1,0 +1,117 @@
+========================================================================
+PEPTIDE BINDER CANDIDATES (composition-complementarity design)
+Structure      : 3ERT
+Pharmacophore  : output/3ERT_pharmacophore.json
+========================================================================
+
+1. WHAT THE POCKET IS ASKING FOR
+   Pocket residues      : 33
+   Mean KD hydropathy   : +0.30 (greasy)
+   Net pocket charge    : -4 at pH 7
+   Pocket span          : 29.29 A
+
+   Weighted demand by feature type (from pocket_profiler.py):
+     cationic                       65.0  (32.2%)
+     hydrophobic                    60.0  (29.7%)
+     anionic                        20.0  ( 9.9%)
+     aromatic                       13.5  ( 6.7%)
+     anionic_or_aromatic            10.5  ( 5.2%)
+     hbond_acceptor                 10.0  ( 5.0%)
+     aromatic_and_hbond              9.0  ( 4.5%)
+     hbond_mixed                     6.0  ( 3.0%)
+     hbond_acceptor_or_covalent      4.0  ( 2.0%)
+     shape                           4.0  ( 2.0%)
+
+   Translated into amino acids the peptide should contain:
+     R  weight    71.5  (10.6%)  -> want about 1.2 copies
+     K  weight    67.7  (10.0%)  -> want about 1.1 copies
+     F  weight    60.1  ( 8.9%)  -> want about 1.0 copies
+     L  weight    60.0  ( 8.9%)  -> want about 1.0 copies
+     I  weight    60.0  ( 8.9%)  -> want about 1.0 copies
+     V  weight    54.0  ( 8.0%)  -> want about 0.9 copies
+     M  weight    42.0  ( 6.2%)  -> want about 0.7 copies
+     D  weight    38.0  ( 5.6%)  -> want about 0.6 copies
+     E  weight    35.6  ( 5.3%)  -> want about 0.6 copies
+     Y  weight    35.0  ( 5.2%)  -> want about 0.6 copies
+     A  weight    33.2  ( 4.9%)  -> want about 0.5 copies
+     W  weight    23.6  ( 3.5%)  -> want about 0.4 copies
+     N  weight    21.8  ( 3.2%)  -> want about 0.4 copies
+     Q  weight    21.8  ( 3.2%)  -> want about 0.4 copies
+     S  weight    19.7  ( 2.9%)  -> want about 0.3 copies
+     T  weight    17.3  ( 2.6%)  -> want about 0.3 copies
+     H  weight     9.6  ( 1.4%)  -> want about 0.2 copies
+     G  weight     3.2  ( 0.5%)  -> want about 0.1 copies
+     P  weight     1.6  ( 0.2%)  -> want about 0.0 copies
+
+2. PEPTIDE LENGTH
+   Chosen length        : 11 residues
+   Why                  : pocket span 29.3 A -> ~6 residues of binding face; 10 distinct feature types -> ~16 residues; averaged and clamped to 8-20
+
+3. CANDIDATES (ranked by composition coverage of the demand above)
+   RANK SEQUENCE                  COVER   LEN  CHARGE   GRAVY     pI   MW (Da)
+   1    RLMWDEIVAKF               78.4%    11   -0.24    0.24   6.07    1407.7
+   2    FTILMYVDREK               77.7%    11   -0.24   -0.02   6.07    1414.7
+   3    RVWKIDALYEF               77.3%    11   -0.24   -0.04   6.07    1439.7
+   4    LVIYEHRFMKD               76.6%    11   -0.15   -0.24   6.76    1450.7
+   5    KVYMLFIRDAR               76.3%    11   +1.76    0.12   9.99    1411.7
+   6    IDYALVMRFRK               76.3%    11   +1.76    0.12   9.99    1411.7
+   7    KWFMQRVILEY               76.2%    11   +0.76   -0.04   8.59    1512.8
+   8    FDSKNMIVERL               76.1%    11   -0.24   -0.23   6.07    1351.6
+
+   COVER  = percent of the pocket's weighted amino-acid demand that
+            this composition covers. It is NOT a binding score.
+   CHARGE = net charge at pH 7 (ProtParam). GRAVY = mean hydropathy;
+            positive is greasy, negative is water-loving.
+
+4. SEARCH SUMMARY
+   Sequences sampled    : 32252 legal unique (from the weighted demand)
+   Rejected by filters  :
+     starts with Met                                      2162
+     run of 4 identical residues                          160
+     45% of the peptide is R                              108
+     GRAVY 1.35 outside -2.0..1.2                         93
+     45% of the peptide is K                              93
+     GRAVY 1.45 outside -2.0..1.2                         91
+     GRAVY 1.25 outside -2.0..1.2                         90
+     starts with Pro                                      89
+   Filters applied      : no Cys; no run of >3 identical residues;
+                          no single residue >40% of the peptide;
+                          GRAVY within -2.0..1.2; |net charge| <= 6;
+                          no leading Met (a start Met gets added later)
+                          and no leading Pro.
+
+5. EXPRESSION HANDOFF
+   plasmid_builder.py only accepts proteins of 20 aa or more, so any
+   design shorter than that is padded to 20 aa with a flexible
+   GSGGS linker at the C terminus before the handoff. The designed
+   residues are never changed; the linker is inert spacer that also
+   keeps the binder face away from the His tag. Padding is recorded in
+   every FASTA header.
+
+WHAT THIS IS, AND WHAT IT IS NOT
+--------------------------------
+These sequences were designed by COMPOSITION-BASED COMPLEMENTARITY: the pocket
+profile says which chemistry a binder should present, and this script picked
+amino acids that present it, in roughly the right proportions, at a sensible
+length.
+
+That is ALL it did. In particular it did NOT:
+  * fold the peptide or model its structure,
+  * dock it into the pocket or place any residue at any coordinate,
+  * compute, estimate or imply a binding affinity, Kd, IC50 or percentage
+    chance of working,
+  * check protease stability, aggregation, solubility in your buffer, or
+    whether the peptide is even capable of reaching the site in a folded
+    protein.
+
+Composition is a real signal - binders to greasy, negatively charged pockets
+really are enriched in greasy, positively charged residues - but it is a weak
+one on its own. Real structure-based mini-protein binder design uses
+RFdiffusion, ProteinMPNN, Rosetta and AlphaFold2 / AF-Multimer, which build an
+actual 3D interface and score it. If this project ever claims otherwise,
+the claim is wrong.
+
+Treat the list as a cheap first panel to express and screen, and expect most
+of it to do nothing. That is the normal outcome for a composition-only method,
+not a failure of your bench work.
+

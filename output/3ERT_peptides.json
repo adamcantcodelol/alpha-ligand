@@ -1,0 +1,290 @@
+{
+  "structure": "3ERT",
+  "source_pharmacophore": "output/3ERT_pharmacophore.json",
+  "design_length": 11,
+  "length_rationale": "pocket span 29.3 A -> ~6 residues of binding face; 10 distinct feature types -> ~16 residues; averaged and clamped to 8-20",
+  "feature_type_weights": {
+    "cationic": 65.0,
+    "aromatic": 13.5,
+    "anionic_or_aromatic": 10.5,
+    "anionic": 20.0,
+    "aromatic_and_hbond": 9.0,
+    "hbond_mixed": 6.0,
+    "hbond_acceptor": 10.0,
+    "hydrophobic": 60.0,
+    "hbond_acceptor_or_covalent": 4.0,
+    "shape": 4.0
+  },
+  "amino_acid_demand": {
+    "R": 71.45,
+    "K": 67.7,
+    "F": 60.15,
+    "W": 23.55,
+    "Y": 35.0,
+    "D": 38.05,
+    "E": 35.65,
+    "H": 9.6,
+    "N": 21.8,
+    "Q": 21.8,
+    "S": 19.7,
+    "T": 17.3,
+    "L": 60.0,
+    "I": 60.0,
+    "V": 54.0,
+    "M": 42.0,
+    "A": 33.2,
+    "G": 3.2,
+    "P": 1.6
+  },
+  "target_counts": {
+    "R": 1.16,
+    "K": 1.1,
+    "F": 0.98,
+    "W": 0.38,
+    "Y": 0.57,
+    "D": 0.62,
+    "E": 0.58,
+    "H": 0.16,
+    "N": 0.35,
+    "Q": 0.35,
+    "S": 0.32,
+    "T": 0.28,
+    "L": 0.98,
+    "I": 0.98,
+    "V": 0.88,
+    "M": 0.68,
+    "A": 0.54,
+    "G": 0.05,
+    "P": 0.03
+  },
+  "plasmid_min_length": 20,
+  "linker_unit": "GSGGS",
+  "designs": [
+    {
+      "rank": 1,
+      "id": "3ERT_pep01",
+      "sequence": "RLMWDEIVAKF",
+      "coverage_score": 78.4,
+      "properties": {
+        "length": 11,
+        "mw_Da": 1407.7,
+        "net_charge_pH7": -0.24,
+        "pI": 6.07,
+        "gravy": 0.245,
+        "aromatic_fraction": 0.182,
+        "hydrophobic_fraction": 0.636,
+        "instability_index": 18.9
+      },
+      "expression_sequence": "RLMWDEIVAKFGSGGSGSGG",
+      "linker_added": "GSGGSGSGG",
+      "expression_properties": {
+        "length": 20,
+        "mw_Da": 2011.2,
+        "net_charge_pH7": -0.24,
+        "pI": 6.07,
+        "gravy": -0.105,
+        "aromatic_fraction": 0.1,
+        "hydrophobic_fraction": 0.35,
+        "instability_index": 27.2
+      }
+    },
+    {
+      "rank": 2,
+      "id": "3ERT_pep02",
+      "sequence": "FTILMYVDREK",
+      "coverage_score": 77.7,
+      "properties": {
+        "length": 11,
+        "mw_Da": 1414.7,
+        "net_charge_pH7": -0.24,
+        "pI": 6.07,
+        "gravy": -0.018,
+        "aromatic_fraction": 0.182,
+        "hydrophobic_fraction": 0.455,
+        "instability_index": 27.6
+      },
+      "expression_sequence": "FTILMYVDREKGSGGSGSGG",
+      "linker_added": "GSGGSGSGG",
+      "expression_properties": {
+        "length": 20,
+        "mw_Da": 2018.2,
+        "net_charge_pH7": -0.24,
+        "pI": 6.07,
+        "gravy": -0.25,
+        "aromatic_fraction": 0.1,
+        "hydrophobic_fraction": 0.25,
+        "instability_index": 27.8
+      }
+    },
+    {
+      "rank": 3,
+      "id": "3ERT_pep03",
+      "sequence": "RVWKIDALYEF",
+      "coverage_score": 77.3,
+      "properties": {
+        "length": 11,
+        "mw_Da": 1439.7,
+        "net_charge_pH7": -0.24,
+        "pI": 6.07,
+        "gravy": -0.045,
+        "aromatic_fraction": 0.273,
+        "hydrophobic_fraction": 0.545,
+        "instability_index": -5.5
+      },
+      "expression_sequence": "RVWKIDALYEFGSGGSGSGG",
+      "linker_added": "GSGGSGSGG",
+      "expression_properties": {
+        "length": 20,
+        "mw_Da": 2043.2,
+        "net_charge_pH7": -0.24,
+        "pI": 6.07,
+        "gravy": -0.265,
+        "aromatic_fraction": 0.15,
+        "hydrophobic_fraction": 0.3,
+        "instability_index": 13.8
+      }
+    },
+    {
+      "rank": 4,
+      "id": "3ERT_pep04",
+      "sequence": "LVIYEHRFMKD",
+      "coverage_score": 76.6,
+      "properties": {
+        "length": 11,
+        "mw_Da": 1450.7,
+        "net_charge_pH7": -0.15,
+        "pI": 6.76,
+        "gravy": -0.245,
+        "aromatic_fraction": 0.182,
+        "hydrophobic_fraction": 0.455,
+        "instability_index": -4.6
+      },
+      "expression_sequence": "LVIYEHRFMKDGSGGSGSGG",
+      "linker_added": "GSGGSGSGG",
+      "expression_properties": {
+        "length": 20,
+        "mw_Da": 2054.2,
+        "net_charge_pH7": -0.15,
+        "pI": 6.75,
+        "gravy": -0.375,
+        "aromatic_fraction": 0.1,
+        "hydrophobic_fraction": 0.25,
+        "instability_index": 14.3
+      }
+    },
+    {
+      "rank": 5,
+      "id": "3ERT_pep05",
+      "sequence": "KVYMLFIRDAR",
+      "coverage_score": 76.3,
+      "properties": {
+        "length": 11,
+        "mw_Da": 1411.7,
+        "net_charge_pH7": 1.76,
+        "pI": 9.99,
+        "gravy": 0.118,
+        "aromatic_fraction": 0.182,
+        "hydrophobic_fraction": 0.545,
+        "instability_index": 34.5
+      },
+      "expression_sequence": "KVYMLFIRDARGSGGSGSGG",
+      "linker_added": "GSGGSGSGG",
+      "expression_properties": {
+        "length": 20,
+        "mw_Da": 2015.3,
+        "net_charge_pH7": 1.76,
+        "pI": 9.99,
+        "gravy": -0.175,
+        "aromatic_fraction": 0.1,
+        "hydrophobic_fraction": 0.3,
+        "instability_index": 31.5
+      }
+    },
+    {
+      "rank": 6,
+      "id": "3ERT_pep06",
+      "sequence": "IDYALVMRFRK",
+      "coverage_score": 76.3,
+      "properties": {
+        "length": 11,
+        "mw_Da": 1411.7,
+        "net_charge_pH7": 1.76,
+        "pI": 9.99,
+        "gravy": 0.118,
+        "aromatic_fraction": 0.182,
+        "hydrophobic_fraction": 0.545,
+        "instability_index": 23.8
+      },
+      "expression_sequence": "IDYALVMRFRKGSGGSGSGG",
+      "linker_added": "GSGGSGSGG",
+      "expression_properties": {
+        "length": 20,
+        "mw_Da": 2015.3,
+        "net_charge_pH7": 1.76,
+        "pI": 9.99,
+        "gravy": -0.175,
+        "aromatic_fraction": 0.1,
+        "hydrophobic_fraction": 0.3,
+        "instability_index": 25.7
+      }
+    },
+    {
+      "rank": 7,
+      "id": "3ERT_pep07",
+      "sequence": "KWFMQRVILEY",
+      "coverage_score": 76.2,
+      "properties": {
+        "length": 11,
+        "mw_Da": 1512.8,
+        "net_charge_pH7": 0.76,
+        "pI": 8.59,
+        "gravy": -0.036,
+        "aromatic_fraction": 0.273,
+        "hydrophobic_fraction": 0.545,
+        "instability_index": 19.7
+      },
+      "expression_sequence": "KWFMQRVILEYGSGGSGSGG",
+      "linker_added": "GSGGSGSGG",
+      "expression_properties": {
+        "length": 20,
+        "mw_Da": 2116.4,
+        "net_charge_pH7": 0.76,
+        "pI": 8.59,
+        "gravy": -0.26,
+        "aromatic_fraction": 0.15,
+        "hydrophobic_fraction": 0.3,
+        "instability_index": 23.5
+      }
+    },
+    {
+      "rank": 8,
+      "id": "3ERT_pep08",
+      "sequence": "FDSKNMIVERL",
+      "coverage_score": 76.1,
+      "properties": {
+        "length": 11,
+        "mw_Da": 1351.6,
+        "net_charge_pH7": -0.24,
+        "pI": 6.07,
+        "gravy": -0.227,
+        "aromatic_fraction": 0.091,
+        "hydrophobic_fraction": 0.455,
+        "instability_index": 30.1
+      },
+      "expression_sequence": "FDSKNMIVERLGSGGSGSGG",
+      "linker_added": "GSGGSGSGG",
+      "expression_properties": {
+        "length": 20,
+        "mw_Da": 1955.1,
+        "net_charge_pH7": -0.24,
+        "pI": 6.07,
+        "gravy": -0.365,
+        "aromatic_fraction": 0.05,
+        "hydrophobic_fraction": 0.25,
+        "instability_index": 33.4
+      }
+    }
+  ],
+  "method": "composition-based complementarity; no folding, no docking, no affinity prediction",
+  "disclaimer": "WHAT THIS IS, AND WHAT IT IS NOT -------------------------------- These sequences were designed by COMPOSITION-BASED COMPLEMENTARITY: the pocket profile says which chemistry a binder should present, and this script picked amino acids that present it, in roughly the right proportions, at a sensible length. That is ALL it did. In particular it did NOT: * fold the peptide or model its structure, * dock it into the pocket or place any residue at any coordinate, * compute, estimate or imply a binding affinity, Kd, IC50 or percentage chance of working, * check protease stability, aggregation, solubility in your buffer, or whether the peptide is even capable of reaching the site in a folded protein. Composition is a real signal - binders to greasy, negatively charged pockets really are enriched in greasy, positively charged residues - but it is a weak one on its own. Real structure-based mini-protein binder design uses RFdiffusion, ProteinMPNN, Rosetta and AlphaFold2 / AF-Multimer, which build an actual 3D interface and score it. If this project ever claims otherwise, the claim is wrong. Treat the list as a cheap first panel to express and screen, and expect most of it to do nothing. That is the normal outcome for a composition-only method, not a failure of your bench work."
+}

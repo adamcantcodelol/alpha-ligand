@@ -433,3 +433,132 @@ Things to know:
 
 The web app in `docs/` still does step 1 alone, with no notebook at all:
 <https://adamcantcodelol.github.io/alpha-ligand/>
+
+---
+
+## The peptide branch - `peptide_designer.py` and `make_peptide_report.py`
+
+Everything above designs a **small molecule**: something you buy from a chemical
+vendor. This branch is the other road. It takes the **same** pharmacophore JSON
+from `pocket_profiler.py` and designs short **peptide** binder candidates, then
+hands them to `plasmid_builder.py` so you finish with an expression-ready,
+annotated GenBank insert.
+
+| | Small molecule branch | Peptide branch |
+|---|---|---|
+| Output | ranked molecules + docking scores | ranked sequences + a cloneable DNA insert |
+| How you obtain it | buy it from a catalogue | express it in *E. coli*, or order it synthesised |
+| Docked? | yes (AutoDock Vina) | **no** - see the honest limits below |
+| Scripts | `ligand_builder.py`, `dock_ligands.py`, `make_report.py` | `peptide_designer.py`, `plasmid_builder.py`, `make_peptide_report.py` |
+
+### Running it
+
+Linux / macOS:
+
+```bash
+./venv/bin/python peptide_designer.py output/3ERT_pharmacophore.json --n 10 --plasmid
+./venv/bin/python make_peptide_report.py output/3ERT_peptides.json --constructs output
+```
+
+Windows (PowerShell):
+
+```powershell
+.\venv\Scripts\python peptide_designer.py output\3ERT_pharmacophore.json --n 10 --plasmid
+.\venv\Scripts\python make_peptide_report.py output\3ERT_peptides.json --constructs output
+```
+
+`--plasmid` runs `plasmid_builder.py` for you. Without it, the one-line handoff
+is printed at the end of the run and is simply:
+
+```bash
+python plasmid_builder.py output/3ERT_peptides.fasta
+```
+
+Needs Biopython, plus DNA Chisel for the plasmid step (`pip install biopython dnachisel`).
+No RDKit, no Vina - the peptide branch is pure Biopython.
+
+### Options for `peptide_designer.py`
+
+| Flag | Default | What it does |
+|---|---|---|
+| `--n` | 10 | how many candidates to keep |
+| `--length` | auto | force a peptide length; default is chosen from pocket span and feature count, clamped to 8-20 aa |
+| `--tries` | 40000 | how many sequences to sample |
+| `--seed` | 0 | random seed, so runs are reproducible |
+| `--plasmid` | off | also run `plasmid_builder.py` on the designed FASTA |
+| `--outdir` | `output` | where files go |
+
+### How it works, in plain English
+
+1. `pocket_profiler.py` already decided, residue by residue, what a binder should
+   present back at the pocket, with a priority score per wish. This script reads
+   that list straight out of the JSON. **The complementarity table lives in one
+   place only** (`COMPLEMENT_RULES` in `pocket_profiler.py`); `peptide_designer.py`
+   only maps each of those feature types onto the amino acids that can present
+   that chemistry - `anionic` -> Asp/Glu, `cationic` -> Arg/Lys, `aromatic` ->
+   Phe/Trp/Tyr, `hydrophobic` -> Leu/Ile/Val/Met, the H-bond types ->
+   Ser/Thr/Asn/Gln/His, and so on. There is no second, contradictory table.
+2. Length comes from the pocket: roughly half the pocket span divided by ~2.4 A
+   per residue, averaged with ~1.6 residues per distinct chemical demand, clamped
+   to 8-20 aa. For 3ERT that gives 11.
+3. It samples tens of thousands of sequences from that weighted demand and scores
+   each on **coverage**: the share of the pocket's weighted amino-acid demand the
+   composition satisfies. Over-supplying one residue earns nothing extra, so an
+   all-hydrophobic pocket does not collapse the answer to `LLLLLLLL`.
+4. Sanity filters throw out anything unusable: free Cys, runs of more than 3
+   identical residues, any residue over 40% of the peptide, too many prolines,
+   GRAVY outside -2.0..1.2, |net charge at pH 7| above 6, a leading Met (a start
+   Met gets added later, and two in a row invites internal-start and
+   Met-aminopeptidase ambiguity) and a leading Pro.
+5. Properties are computed with Biopython's `ProtParam`: length, net charge at
+   pH 7, GRAVY, predicted pI, molecular weight, instability index.
+
+### The 20 aa floor, handled openly
+
+`plasmid_builder.py` refuses proteins shorter than 20 aa, and these peptides are
+deliberately 8-20 aa, so most would be silently skipped. Instead of letting that
+happen, `peptide_designer.py` pads any short design up to 20 aa with an inert,
+flexible `GSGGS` linker on the C-terminal side, which also keeps the designed face
+away from the His tag. The designed residues are never altered, and the padding is
+recorded in the FASTA header, the JSON, the text report and the HTML page.
+
+### `make_peptide_report.py`
+
+The peptide twin of `make_report.py`, kept as a separate file so neither branch
+can break the other. One self-contained HTML page: sequences in copyable,
+chemistry-coloured form, every property, a per-peptide check that the construct's
+DNA really translates back to the design, what to do at the bench, and the
+limitations. Plus a CSV for Excel.
+
+### Honest limits - please read this bit
+
+This is **composition-based complementarity, not structure-based binder design.**
+It does not fold the peptide, does not dock it, does not place any residue at any
+coordinate, and computes **no** affinity, Kd, IC50 or probability of binding.
+No such number appears anywhere in the output, because none was calculated.
+
+* **Residue order is essentially arbitrary.** The score only sees composition, so
+  two sequences with the same residues score identically however they are
+  arranged. A scrambled version of a design is the right negative control, and it
+  is a control this method cannot pass by construction.
+* **A peptide may not reach the pocket at all.** Sites that comfortably fit a
+  small molecule are often too enclosed for a peptide backbone. 3ERT's
+  tamoxifen pocket is a good example of a deeply buried site.
+* Solubility, aggregation, protease sensitivity and cell permeability are not
+  modelled. GRAVY and the instability index are crude proxies.
+* Cys is excluded by default, so disulfide-stapled and cyclic designs are out of
+  scope.
+* The pocket profile came from one crystal structure and the residues you named.
+  Wrong residues in, wrong peptides out.
+* Real structure-based mini-protein binder design uses **RFdiffusion,
+  ProteinMPNN, Rosetta and AlphaFold2 / AF-Multimer**, which build and score an
+  actual 3D interface. Nothing here substitutes for them. The honest prior is
+  that most composition-only designs do nothing; a negative panel should push you
+  toward those tools rather than toward more sampling.
+
+### Tested end to end on 3ERT
+
+`peptide_designer.py output/3ERT_pharmacophore.json --n 8 --plasmid` designs 11-aa
+peptides (top hit `RLMWDEIVAKF`, 78.4% coverage), pads each to 20 aa, and
+`plasmid_builder.py` builds all 8 as 99 bp NdeI/XhoI inserts whose DNA translates
+back to `M` + peptide + `LEHHHHHH` exactly - 8 of 8 with all checks passed.
