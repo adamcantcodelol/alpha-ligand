@@ -123,14 +123,19 @@
     </div>
 
     <div class="card colab">
-      <h2>Next step: build and dock molecules</h2>
+      <h2>Next step: build and dock molecules &mdash; one link, one button</h2>
       <p>This page does <strong>step 1</strong> &mdash; it profiles the pocket and tells you what
       chemistry a binder needs. Building actual 3D molecules and docking them into the pocket
       needs RDKit and AutoDock Vina, which cannot run inside a web page.</p>
-      <p>So they run in a <strong>Google Colab notebook</strong> instead: it is still just a link,
-      still nothing to install, but the work happens on Google's computers rather than in your
-      browser. It runs all three steps, including this one.</p>
-      <p><a class="colab-link" href="https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb" target="_blank" rel="noopener">Open the full pipeline in Google Colab &rarr;</a></p>
+      <p>So they run in a <strong>Google Colab notebook</strong> instead: still just a link,
+      still <strong>nothing for you to install</strong> &mdash; it installs everything it needs on
+      Google's computer, not on yours. Fill in one form, press one play button, and it profiles the
+      pocket, screens millions of real published compounds, docks the best ones and shows you a
+      readable results page.</p>
+      <p><a class="colab-link" href="https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_OneClick.ipynb" target="_blank" rel="noopener">Run the whole pipeline in one click &rarr;</a></p>
+      <p class="hint">Advanced: the <a href="https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb" target="_blank" rel="noopener">step-by-step notebook</a>
+      runs the same pipeline one cell at a time and adds the optional peptide-binder branch.
+      Neither notebook needs anything installed on your computer.</p>
       <p class="hint">Scores there are empirical docking estimates, not binding affinities. A good
       score is a reason to test a molecule, not proof that it binds.</p>
     </div>

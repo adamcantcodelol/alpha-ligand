@@ -1,11 +1,25 @@
-# binder-app
+# binder-app — Alpha-Ligand
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb)
+[![Open the one-click notebook in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_OneClick.ipynb)
 
-**Want the whole pipeline with nothing to install?** Click the badge above - it opens
-`Alpha_Ligand_Pipeline.ipynb` in Google Colab and runs all three steps (profile the
-pocket, build molecules, dock them, and write the readable report) on Google's computers, in your browser. See
-[Run it in Google Colab](#run-it-in-google-colab-no-install) below.
+## Start here: you do not have to install anything
+
+| How you want to run it | What you need to install |
+| --- | --- |
+| [**One-click notebook (recommended)**](https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_OneClick.ipynb) — fill one form, press one play button, get a results page | **Nothing.** It runs on a free Google computer and installs its own software there. |
+| [Step-by-step notebook](https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb) — the same pipeline in separate cells, plus the optional peptide branch | **Nothing**, same as above. |
+| [The web page](https://adamcantcodelol.github.io/alpha-ligand/) — pocket profiling only, instantly | **Nothing.** It runs in your own browser. |
+| [On your own computer](#running-it-on-your-own-computer-not-needed-for-colab) — for developers, or offline work | Python, RDKit, Biopython, meeko and AutoDock Vina, installed by you. |
+
+> ### Using Colab? Ignore every install instruction in this README.
+> Everything below that mentions `python -m venv`, `pip install`, `vina.exe`
+> or PowerShell is for the **last row of that table only** — running the code on
+> your own machine. A Colab user installs **nothing**: the notebook does it all
+> on Google's computer, every time you run it. If a page ever tells you to
+> download Python or Vina while you are in Colab, that page is not talking
+> to you.
+
+---
 
 Two small, beginner-friendly Python tools:
 
@@ -20,7 +34,13 @@ Two small, beginner-friendly Python tools:
 4. **`make_report.py`** – turns all of that into **one readable HTML page** (plus a CSV) that you can double-click, print, or email to someone who has none of this installed.
 5. **`plasmid_builder.py`** – takes protein sequences in a FASTA file and designs codon-optimised, His-tagged E. coli genes ready for NdeI/XhoI cloning.
 
-## Setup
+## Running it on your own computer (NOT needed for Colab)
+
+> **Skip this whole section if you are using either Colab notebook or the web
+> page.** Nothing here applies to you; the notebook installs everything it needs
+> on Google's machine, not yours.
+
+This is the local developer install: Python on your own computer.
 
 ```bash
 cd binder-app
@@ -28,9 +48,12 @@ python3 -m venv venv
 ./venv/bin/pip install biopython dnachisel
 ```
 
-Nothing else is needed. (Installed and tested with Biopython 1.88 and DNA Chisel 3.2.16.)
+That is enough for the profiler and the peptide branch. For molecule building
+and docking you also need RDKit, meeko, scipy, gemmi and AutoDock Vina — see
+[the full local pipeline](#the-full-three-step-pipeline-on-your-own-computer-windows-powershell--not-needed-for-colab).
+(Installed and tested with Biopython 1.88 and DNA Chisel 3.2.16.)
 
-## Running them
+### Running them locally
 
 ```bash
 ./venv/bin/python pocket_profiler.py 3ERT A:351,A:383,A:524 --cutoff 6
@@ -70,7 +93,9 @@ No docking, no energy function, no conformational sampling, no estimate of affin
 `ligand_builder.py` takes that answer and builds actual molecules with real
 3D coordinates you can open in a viewer or hand to a docking program.
 
-### Running it on Windows (PowerShell)
+### Running it on your own computer, Windows (PowerShell) — NOT needed for Colab
+
+> In Colab this is done for you. This block is for a local install only.
 
 First profile a pocket (this writes the JSON the builder needs):
 
@@ -209,6 +234,8 @@ fails or you are offline. ChEMBL data is CC BY-SA 3.0.
 
 ### Running it
 
+(Local install only — in either Colab notebook this command is run for you.)
+
 ```powershell
 python screen_library.py output\3ERT_pharmacophore.json
 python dock_ligands.py output\3ERT_pharmacophore.json --ligands output\3ERT_ligands.sdf --receptor 3ERT --control-smiles "CC/C(=C(\c1ccc(O)cc1)c1ccc(OCCN(C)C)cc1)c1ccccc1" --control-name 4-hydroxytamoxifen
@@ -310,7 +337,12 @@ score it can find, in kcal/mol (more negative = Vina likes it more).
 > Vina are desktop programs - there is no way to run them inside a web page, so
 > molecule building and docking are a local step.
 
-### The full three-step pipeline on Windows (PowerShell)
+### The full three-step pipeline on your own computer, Windows (PowerShell) — NOT needed for Colab
+
+> **Colab users: skip this.** The notebooks install Python, RDKit, meeko and the
+> Linux build of Vina on Google's machine automatically. You never download
+> `vina_1.2.5_win.exe` and you never make a venv. The instructions below are
+> only for running the pipeline on your own Windows machine.
 
 Open PowerShell and run these one block at a time, from the repo folder.
 
@@ -467,7 +499,7 @@ that a human can actually use:
 python make_report.py output/3ERT_pharmacophore.json
 ```
 
-Windows (PowerShell), from the repo folder:
+Windows (PowerShell), from the repo folder (local install only — not needed in Colab):
 
 ```powershell
 .\venv\Scripts\python.exe make_report.py output\3ERT_pharmacophore.json
@@ -531,48 +563,60 @@ The output is the **insert only** – no plasmid backbone is invented anywhere. 
 
 ---
 
-## Run it in Google Colab (no install)
+## Run it in Google Colab (nothing to install, ever)
 
-`Alpha_Ligand_Pipeline.ipynb` is a notebook that runs the full three-step pipeline
-in a browser tab. Nothing is installed on your computer: Colab gives you a free
-Linux machine, the notebook installs RDKit, Biopython, meeko and the Linux build of
-AutoDock Vina on it, clones this repo, and runs the three scripts.
+There are two notebooks. Both run on a free Google Linux machine that installs
+RDKit, Biopython, meeko and the Linux build of AutoDock Vina **on itself** and
+clones this repo. **Nothing is installed on your computer, and nothing in the
+"on your own computer" sections of this README applies to you.**
+
+### 1. `Alpha_Ligand_OneClick.ipynb` — one form, one button (start here)
+
+**Link:** <https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_OneClick.ipynb>
+
+One cell. You fill in the form — PDB code (or tick the box to upload your own
+`.pdb`/`.cif`), active-site residues, cutoff, library, how many molecules,
+an effort setting (`small` / `medium` / `large`) and the control ligand — then
+press its play button once, or use *Runtime → Run all*. It then:
+
+* installs everything and clones the repo,
+* checks what you typed and explains, in plain English, anything that is wrong,
+* **finds the active-site residues for you if you leave that box empty**, from
+  whatever is bound in the crystal,
+* profiles the pocket, screens the library, builds 3D molecules, docks them,
+* writes the readable HTML report, displays it inline, and downloads every file.
+
+It prints a `STAGE n of 7` header with a running clock, so a few quiet minutes
+during docking never look like a hang. Failures are caught and printed as a
+short "here is what to do about it" box, not a traceback: bad PDB code, bad
+residue format, a chain or residue that is not in the structure, an apo
+structure with nothing bound to guess from, a network failure on the library
+download, and a missing Vina all have their own message. If docking fails but
+everything before it worked, it still writes a chemistry-only report.
+
+### 2. `Alpha_Ligand_Pipeline.ipynb` — step by step / advanced
 
 **Link:** <https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb>
 
-You click the play button on each cell, top to bottom. **No code editing is
-needed**: Step 2 is a Colab form with real text boxes and sliders for
+The same pipeline, one cell per stage, so you can inspect and re-run each one.
+It also carries the optional **peptide-binder branch**, which the one-click
+notebook does not. Step 2 is a Colab form; Step 2b suggests active-site
+residues from the crystal; Step 2c echoes back what is about to be analysed.
 
-* `PDB_CODE` (or tick `UPLOAD_MY_OWN_FILE` to upload your own `.pdb`/`.cif`),
-* `ACTIVE_SITE_RESIDUES` as `chain:number`, comma separated,
-* `CUTOFF_ANGSTROMS`, `NUMBER_OF_MOLECULES`, `CONFORMERS_PER_MOLECULE`,
-* `CONTROL_LIGAND` (`auto` / `none` / `custom` + a SMILES box).
+### Things to know about both
 
-The boxes start on the `3ERT` example (`A:351,A:383,A:524`); overwrite them for
-your own protein. Step 2b inspects the structure and suggests active-site
-residues from whatever is bound in the crystal, printed in the exact
-`chain:number` format to copy and paste. Step 2c echoes back the protein,
-residues, cutoff and control that are about to be used, and stops with a plain
-message if the residues box is empty or malformed. The last cell downloads the
-result files - reports, the generated molecules and the docked poses - to your
-computer.
+* The control is tied to the protein: `auto` uses a known binder **only** when
+  the code really is one this project knows (3ERT → 4-hydroxytamoxifen,
+  5EHR/2SHP → SHP099), and no control at all otherwise, since a control from a
+  different protein is meaningless. Use `custom` to supply your own SMILES.
+* Residue suggestions come from the crystal contents, not from biology. Check
+  them against the paper.
+* The install takes a few minutes and must run again if Colab disconnects you.
+* A free Colab machine is reclaimed when idle. Nothing is lost except time.
+* Vina scores are empirical estimates, not affinities, and a good score is not
+  a validated binder.
 
-Things to know:
-
-* The control is tied to the protein: `auto` uses 4-hydroxytamoxifen **only**
-  when the code really is `3ERT`, and no control at all otherwise, since a
-  control from a different protein is meaningless. Use `custom` to supply one.
-* Step 2b's suggestions come from the crystal contents, not from biology. If the
-  structure is apo (nothing bound) it says so and points you at the literature or
-  the RCSB entry page.
-* The install cell takes a few minutes, and must be re-run if Colab disconnects your
-  session.
-* A free Colab machine is reclaimed when idle. Nothing is lost except time; re-run
-  from the top.
-* The same honesty applies as everywhere else here: Vina scores are empirical
-  estimates, not affinities, and a good score is not a validated binder.
-
-The web app in `docs/` still does step 1 alone, with no notebook at all:
+The web app in `docs/` does step 1 alone, instantly, with no notebook at all:
 <https://adamcantcodelol.github.io/alpha-ligand/>
 
 ---
@@ -593,6 +637,10 @@ annotated GenBank insert.
 | Scripts | `ligand_builder.py`, `dock_ligands.py`, `make_report.py` | `peptide_designer.py`, `plasmid_builder.py`, `make_peptide_report.py` |
 
 ### Running it
+
+In Colab, use the peptide cells at the bottom of
+[the step-by-step notebook](https://colab.research.google.com/github/adamcantcodelol/alpha-ligand/blob/main/Alpha_Ligand_Pipeline.ipynb) — nothing to install. The commands below are
+for a local install only.
 
 Linux / macOS:
 
